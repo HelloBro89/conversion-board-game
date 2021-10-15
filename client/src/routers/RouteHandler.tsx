@@ -1,17 +1,17 @@
 import React from "react";
 import { BrowserRouter as Router, Route, /* Link */ } from "react-router-dom";
-
+import { MainPage } from "../pages/mainPage/mainPage";
 
  const RouteHandler = () => (
      <div>
          <Router>
 
              <Route exact path='/'>
-             Test Route
+               <MainPage/>
              </Route>
 
              <Route exact path='/game'>
-             Test Game
+                 Test Game
              </Route>
 
          </Router>
