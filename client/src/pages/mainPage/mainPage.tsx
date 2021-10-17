@@ -8,7 +8,7 @@ export const MainPage = () => {
 
     return (
             <Box className={classes.boxNickName}>
-                <TextField className={classes.textField} id="outlined-basic" label="Enter your nick-name" variant="outlined" />
+                <TextField className={classes.textField} id="filled-basic" label="Enter your nick-name" variant="filled" />
             </Box>
     );
 };
