@@ -5,9 +5,6 @@ import { makeStyles, createStyles/* , Theme */ } from "@material-ui/core/styles"
 
 export const useStyles = makeStyles(() =>
 createStyles({
-    appBar: {
-        backgroundColor: 'rgba(58, 51, 46, 0.6)'
-    },
     boxNickName: {
         marginTop: '150px',
         textAlign: 'center',
@@ -17,15 +14,29 @@ createStyles({
         marginLeft: 'auto',
         border: '3px solid black',
         borderRadius: '15px',
-        backgroundColor: 'rgba(58, 51, 46, 0.6)',
+        backgroundColor: 'rgba(130, 113, 101, 0.6)',
         // opacity: '0.1',
     },
     textField: {
-        marginTop: '40px',
+        borderRadius: '7px',
+        marginTop: '8%',
+        marginRight: 'auto',
+        marginLeft: 'auto',
+        width: '70%',
+        display: 'block',
         backgroundColor: 'white'
     },
-    helpBut: {
-        marginLeft: 'auto'
+    applyBut: {
+        marginRight: 'auto',
+        marginLeft: 'auto',
+        marginTop: '3%',
+        width: '35%',
+        display: 'block',
+        backgroundColor: 'green'
+        
+    },
+    navStyle: {
+        textDecoration: 'none'
     }
 
 }));

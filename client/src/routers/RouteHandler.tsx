@@ -1,21 +1,24 @@
 import React from "react";
-import { BrowserRouter as Router, Route, /* Link */ } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch /* Link */ } from "react-router-dom";
+import { Box } from "@material-ui/core";
 import { MainPage } from "../pages/mainPage/mainPage";
+import { MainLayout } from "../pages/mainLobby/mainLobby";
+
+
 
  const RouteHandler = () => (
-     <div>
+    <Box style={{height: '1000px', width: '100%'}}>
          <Router>
-
-             <Route exact path='/'>
-               <MainPage/>
-             </Route>
-
-             <Route exact path='/game'>
-                 Test Game
-             </Route>
-
-         </Router>
-     </div>
+             <Switch>
+                <Route exact path='/'>
+                    <MainPage/>
+                </Route>
+                <Route exact path='/lobby'>
+                    <MainLayout/>
+                </Route>
+             </Switch>
+        </Router>
+    </Box>
  )
 
 export default RouteHandler
