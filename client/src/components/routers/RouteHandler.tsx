@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch /* Link */ } from "react-router-dom";
 import { Box } from "@material-ui/core";
-import { MainPage } from "../pages/mainPage/mainPage";
+import { MainPage } from "../pages/mainPage/components/mainPage";
 import { MainLayout } from "../pages/mainLobby/mainLobby";
 
 

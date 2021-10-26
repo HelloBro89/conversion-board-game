@@ -1,4 +1,4 @@
-import axios from '../components/services/api';
+import axios from '../services/api';
 
 const getAllTasks = async () => {
   //  const res = await axios.get('/getAll');
