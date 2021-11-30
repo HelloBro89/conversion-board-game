@@ -8,6 +8,22 @@ createStyles({
     },
     helpBut: {
         marginLeft: 'auto'
+    },
+    bottomNav: {
+        backgroundColor: 'grey',
+        height: '10vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignContent: 'center',
+        flexDirection: 'column'
+    },
+    test: {
+        display: 'flex',
+        justifyContent: 'center',
+        // display: 'flex',
+        // justifyContent: 'center',
+        // alignContent: 'center',
+        // flexDirection: 'row'
     }
 
 }));
