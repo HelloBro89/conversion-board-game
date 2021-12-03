@@ -11,19 +11,15 @@ createStyles({
     },
     bottomNav: {
         backgroundColor: 'grey',
-        height: '10vh',
+        height: '8vh',
         display: 'flex',
         justifyContent: 'center',
         alignContent: 'center',
         flexDirection: 'column'
     },
-    test: {
+    bottomNavText: {
         display: 'flex',
         justifyContent: 'center',
-        // display: 'flex',
-        // justifyContent: 'center',
-        // alignContent: 'center',
-        // flexDirection: 'row'
     }
 
 }));

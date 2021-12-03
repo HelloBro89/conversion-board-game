@@ -6,7 +6,8 @@ import { makeStyles, createStyles/* , Theme */ } from "@material-ui/core/styles"
 export const useStyles = makeStyles(() =>
 createStyles({
     boxNickName: {
-        marginTop: '150px',
+        // marginTop: '150px',
+        marginTop: '20vh',
         textAlign: 'center',
         height: '150px',
         width: '300px',
@@ -36,7 +37,8 @@ createStyles({
         
     },
     navStyle: {
-        textDecoration: 'none'
+        // textDecoration: 'none',
+        backgroundColor: 'red'
     }
 
 }));

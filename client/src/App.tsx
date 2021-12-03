@@ -2,7 +2,7 @@ import React, { FC/* , ChangeEvent, useState, useEffect */ } from "react";
 import { AppBar, Button, Toolbar, Box, BottomNavigation } from "@material-ui/core";
 import MenuIcon from '@mui/icons-material/Menu';
 import { useStyles } from "./layoutStyle";
-import  Routers from './components/routers/RouteHandler';
+import Routers from './components/routers/RouteHandler';
 
 // import { ITaskList } from './Interfaces';} from './requests/requests';
 
@@ -13,8 +13,8 @@ const App: FC = () => {
     <Box>
       <AppBar className={style.appBar} position='static'>
         <Toolbar>
-          <Button color="inherit">Main Page</Button>
-          <Button className={style.helpBut} color="inherit"> 
+          <Button color="inherit" onClick={() => alert('Back to home page...')}>Home Page</Button>
+          <Button className={style.helpBut} color="inherit" onClick={() => alert('Here will be About and Regulations and other')}> 
           <MenuIcon/>help
           </Button>
         </Toolbar>
@@ -23,9 +23,9 @@ const App: FC = () => {
       <Box>
         <Routers/>
       </Box>
-      <BottomNavigation  showLabels className={style.bottomNav}>
-        <Box className={style.test}>Here will be my post, git Repo and other contacts...</Box>
-        <Box className={style.test}>Here will be my post, git Repo and other contacts...</Box>
+      <BottomNavigation  /* showLabels */ className={style.bottomNav}>
+        <Box className={style.bottomNavText}>Here will be my post, git Repo and other contacts...</Box>
+        <Box className={style.bottomNavText}>Here will be my post, git Repo and other contacts...</Box>
       </BottomNavigation>
     </Box>
   )

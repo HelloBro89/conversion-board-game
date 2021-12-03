@@ -13,11 +13,13 @@ const FormNickName = () => {
     
     const handlerTextField = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         e.preventDefault();
+        // console.log('test');
         dispatch(setNickName(e.target.value));
 
     }
 
     const addNickName = () => {
+        // console.log('NAME')
         console.log(searchNickName.nickName);
     }
 
@@ -25,10 +27,11 @@ const FormNickName = () => {
         <Box className={classes.boxNickName}>
             {/* <Button onClick={ addNickName }  variant="contained">Enter</Button> */}
             <TextField  onChange={(e) => handlerTextField(e)} className={classes.textField} id="filled-basic" label="Enter your nick-name" variant="filled" />
-            <nav>
-                <NavLink to='/lobby' className={classes.navStyle}>
-                    <Button onClick={ addNickName } className={classes.applyBut} variant="contained">Enter</Button>
+            <nav style={{backgroundColor: 'red'}}>
+                <NavLink to='/lobby'  className={classes.navStyle}>
                 </NavLink>
+                <Button onClick={ addNickName } className={classes.applyBut} variant="contained">Enter</Button>
+
             </nav>
         </Box>
     )

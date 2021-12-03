@@ -7,7 +7,7 @@ import { MainLayout } from "../pages/mainLobby/mainLobby";
 
 
  const RouteHandler = () => (
-    <Box style={{height: '81vh', width: '100%'}}>
+    <Box style={{height: '83vh', width: '100%'}}>
          <Router>
              <Switch>
                 <Route exact path='/'>
