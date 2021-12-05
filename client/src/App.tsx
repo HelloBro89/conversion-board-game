@@ -23,7 +23,7 @@ const App: FC = () => {
       <Box>
         <Routers/>
       </Box>
-      <BottomNavigation  /* showLabels */ className={style.bottomNav}>
+      <BottomNavigation className={style.bottomNav}>
         <Box className={style.bottomNavText}>Here will be my post, git Repo and other contacts...</Box>
         <Box className={style.bottomNavText}>Here will be my post, git Repo and other contacts...</Box>
       </BottomNavigation>
