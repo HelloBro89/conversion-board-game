@@ -1,9 +1,8 @@
 import React, { FC /* , ChangeEvent, useState, useEffect */ } from 'react';
 import { AppBar, Button, Toolbar, Box } from '@material-ui/core';
-import MenuIcon from '@mui/icons-material/Menu';
 import { useStyles } from './layoutStyle';
 import Routers from './components/routers/RouteHandler';
-import IconButton from '@mui/material/IconButton';
+import { MenuListComposition } from './layoutElements/menuList';
 
 // import { ITaskList } from './Interfaces';} from './requests/requests';
 
@@ -13,24 +12,30 @@ const App: FC = () => {
         <Box>
             <AppBar className={style.appBar} /* position="static" */>
                 <Toolbar>
-                    <Button color="inherit" onClick={() => alert('Back to home page...')}>
+                    <Button
+                        className={style.homePageBut}
+                        color="inherit"
+                        onClick={() => alert('Back to home page...')}
+                    >
                         Home Page
                     </Button>
-                    <Box className={style.boxHelp}>
-                        <IconButton
+                    <Box className={style.menuList}>
+                        <MenuListComposition />
+                        {/* <IconButton
                             color="inherit"
                             onClick={() => alert('Here will be About and Regulations and other')}
                         >
                             <MenuIcon />
-                        </IconButton>
-                        HELP
+                        </IconButton> */}
                     </Box>
+                    <Box className={style.boxHelp}>HELP</Box>
                 </Toolbar>
             </AppBar>
 
             <Box>
                 <Routers />
             </Box>
+
             <Box className={style.bottomNav}>
                 <Box className={style.bottomNavText}>
                     Here will be my post, git Repo and other contacts...
