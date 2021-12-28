@@ -2,7 +2,7 @@ import React, { ChangeEvent } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useStyles } from '../styleMainPage';
 import { useDispatch, useSelector } from 'react-redux';
-import { TextField, Box, Button } from '@material-ui/core';
+import { TextField, Box } from '@material-ui/core';
 import { setNickName } from '../../../redux/actions/nickNameAction';
 import { RootState } from '../../../redux';
 
@@ -13,7 +13,12 @@ const FormNickName = () => {
 
     const handlerTextField = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         e.preventDefault();
-        dispatch(setNickName(e.target.value));
+        const nickValue = e.target.value;
+        if (nickValue.trim() === ' ') {
+            alert('Enter your nick-name!');
+            return;
+        }
+        dispatch(setNickName(nickValue));
     };
 
     const getNickName = () => {
@@ -22,13 +27,17 @@ const FormNickName = () => {
 
     return (
         <Box className={classes.boxNickName}>
-            {/* <Button onClick={ addNickName }  variant="contained">Enter</Button> */}
-            <TextField onChange={(e) => handlerTextField(e)} className={classes.textField} id="filled-basic" label="Enter your nick-name" variant="filled" />
-            <nav style={{ backgroundColor: 'red' }}>
-                <NavLink to="/lobby" className={classes.navStyle}></NavLink>
-                <Button onClick={getNickName} className={classes.applyBut} variant="contained">
+            <TextField
+                onChange={(e) => handlerTextField(e)}
+                className={classes.textField}
+                id="filled-basic"
+                label="Enter your nick-name"
+                variant="filled"
+            />
+            <nav>
+                <NavLink to="/lobby" type="button" onClick={getNickName} className={classes.navStyle}>
                     Enter
-                </Button>
+                </NavLink>
             </nav>
         </Box>
     );

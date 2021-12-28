@@ -1,7 +1,7 @@
 import { SET_NICK_NAME } from '../actions/nickNameAction';
 
 const initialState = {
-    nickName: 'NICK-NAME',
+    nickName: '',
 };
 
 function nickNameReducer(state = initialState, action: { type: string; payload: string }) {
