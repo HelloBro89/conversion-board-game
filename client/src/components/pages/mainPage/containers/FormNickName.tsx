@@ -1,4 +1,4 @@
-import React, { ChangeEvent, MouseEvent /* useRef */ } from 'react';
+import React, { ChangeEvent, MouseEvent, KeyboardEvent, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useStyles } from '../styleMainPage';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,17 +7,16 @@ import { setNickName } from '../../../redux/actions/nickNameAction';
 import { RootState } from '../../../redux';
 
 const FormNickName = () => {
-    // const test = useRef<HTMLAnchorElement>(null);
+    const ref = useRef<HTMLAnchorElement>(null);
     const classes = useStyles();
     const searchNickName = useSelector((state: RootState) => state.nickName);
     const dispatch = useDispatch();
 
     const handlerTextField = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         e.preventDefault();
-        const nickValue = e.target.value;
+        const nickValue = e.currentTarget.value;
         const regexp = /^\S/;
         const matchedValue = nickValue.match(regexp);
-        // console.log(matchedValue);
 
         if (matchedValue) {
             dispatch(setNickName(nickValue));
@@ -36,9 +35,19 @@ const FormNickName = () => {
         console.log(searchNickName.nickName);
     };
 
+    const pushEnter = (e: KeyboardEvent) => {
+        if (e.code === 'Enter' || e.code === 'NumpadEnter') {
+            const elemTest = ref.current as HTMLElement;
+            console.log('PUSH');
+            elemTest.click();
+        }
+        return;
+    };
+
     return (
         <Box className={classes.boxNickName}>
             <TextField
+                onKeyDown={(e) => pushEnter(e)}
                 onChange={(e) => handlerTextField(e)}
                 className={classes.textField}
                 id="filled-basic"
@@ -48,7 +57,7 @@ const FormNickName = () => {
                 value={searchNickName.nickName}
             />
             <nav>
-                <NavLink to="/lobby" /* ref={test} */ /*  id="send" */ onClick={(e) => getNickName(e)} className={classes.navStyle}>
+                <NavLink to="/lobby" ref={ref} id="send" onClick={(e) => getNickName(e)} className={classes.navStyle}>
                     Enter
                 </NavLink>
             </nav>
