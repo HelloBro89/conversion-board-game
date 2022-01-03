@@ -1,8 +1,8 @@
 import { Box } from '@material-ui/core';
-// import { useStyles } from "./styleMainLobby";
+import { useStyles } from './styleMainLobby';
 
 export const Lobby = () => {
-    // const classes = useStyles();
-
-    return <Box>There will be main lobby</Box>;
+    const styles = useStyles();
+    // return <div>TEST</div>;
+    return <Box className={styles.lobby}>There will be main lobby</Box>;
 };

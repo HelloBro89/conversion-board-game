@@ -1,0 +1,10 @@
+.test {
+    border-radius: 7px;
+    margin-right: auto;
+    margin-left: auto;
+    height: 40px;
+    width: 70%;
+    display: block;
+    background-color: white;
+    margin-top: 8%;
+}
