@@ -1,8 +1,11 @@
-import { Box } from '@material-ui/core';
-import { useStyles } from './styleMainLobby';
+import styles from './App.module.css';
 
 export const Lobby = () => {
-    const styles = useStyles();
+    // const styles = useStyles();
     // return <div>TEST</div>;
-    return <Box className={styles.lobby}>There will be main lobby</Box>;
+    return (
+        <div>
+            <div className={styles.test}>There will be main lobby</div>
+        </div>
+    );
 };

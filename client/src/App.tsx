@@ -10,19 +10,20 @@ const App: FC = () => {
     const style = useStyles();
     return (
         <Box>
-            <AppBar className={style.appBar}>
-                <Toolbar>
-                    <Button className={style.homePageBut} color="inherit" onClick={() => alert('Back to home page...')}>
-                        Home Page
-                    </Button>
-                    <Box className={style.menuList}>
-                        <MenuListComposition />
-                    </Box>
-                    <Box className={style.boxHelp}>HELP</Box>
-                </Toolbar>
-            </AppBar>
-
             <Box>
+                <AppBar className={style.appBar}>
+                    <Toolbar>
+                        <Button className={style.homePageBut} color="inherit" onClick={() => alert('Back to home page...')}>
+                            Home Page
+                        </Button>
+                        <Box className={style.menuList}>
+                            <MenuListComposition />
+                        </Box>
+                        <Box className={style.boxHelp}>HELP</Box>
+                    </Toolbar>
+                </AppBar>
+            </Box>
+            <Box /* style={{ marginTop: '10px' }} */>
                 <RouteHandler />
             </Box>
 

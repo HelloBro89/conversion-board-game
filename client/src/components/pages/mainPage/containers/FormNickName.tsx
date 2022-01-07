@@ -1,8 +1,8 @@
 import React, { ChangeEvent, MouseEvent, KeyboardEvent, useRef } from 'react';
+import { TextField, Box } from '@material-ui/core';
 import { NavLink } from 'react-router-dom';
 import { useStyles } from '../styleMainPage';
 import { useDispatch, useSelector } from 'react-redux';
-import { /* TextField, */ Box } from '@material-ui/core';
 import { setNickName } from '../../../redux/actions/nickNameAction';
 import { RootState } from '../../../redux';
 import '../test.css';
@@ -47,24 +47,24 @@ const FormNickName = () => {
 
     return (
         <Box className={classes.boxNickName}>
-            <input
+            {/* <input
                 type="text"
                 className="test"
                 placeholder="Enter your nick-name"
                 onKeyDown={(e) => pushEnter(e)}
                 onChange={(e) => handlerTextField(e)}
                 value={searchNickName.nickName}
-            ></input>
-            {/* <TextField
+            ></input> */}
+            <TextField
                 onKeyDown={(e) => pushEnter(e)}
                 onChange={(e) => handlerTextField(e)}
                 className={classes.textField}
-                id="filled-basic"
+                // id="filled-basic"
                 label="Enter your nick-name"
                 variant="filled"
                 autoComplete="off"
                 value={searchNickName.nickName}
-            /> */}
+            />
             <nav>
                 <NavLink to="/lobby" ref={ref} id="send" onClick={(e) => getNickName(e)} className={classes.navStyle}>
                     Enter

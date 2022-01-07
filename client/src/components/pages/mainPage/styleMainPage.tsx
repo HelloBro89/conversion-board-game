@@ -17,10 +17,10 @@ export const useStyles = makeStyles(() =>
         },
         textField: {
             borderRadius: '7px',
-            marginRight: 'auto',
-            marginLeft: 'auto',
+            // marginRight: 'auto',
+            // marginLeft: 'auto',
             width: '70%',
-            display: 'block',
+            // display: 'block',
             backgroundColor: 'white',
             marginTop: '8%',
         },

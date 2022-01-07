@@ -14,7 +14,6 @@ export const useStyles = makeStyles(() =>
             color: 'white',
         },
         boxHelp: {
-            // backgroundColor: 'red',
             marginRight: '3%',
         },
         bottomNav: {
