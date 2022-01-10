@@ -17,14 +17,10 @@ export const useStyles = makeStyles(() =>
         },
         textField: {
             borderRadius: '7px',
-            // marginRight: 'auto',
-            // marginLeft: 'auto',
             width: '70%',
-            // display: 'block',
             backgroundColor: 'white',
             marginTop: '8%',
         },
-        // applyBut: {},
         navStyle: {
             border: '1px solid black',
             textDecoration: 'none',

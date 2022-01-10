@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes /* Switch */ /* Link */ } from 'react-router-dom';
 import { Box } from '@material-ui/core';
 import { MainPage } from '../pages/mainPage/components/mainPage';
-import { Lobby } from '../pages/Lobby/Lobby';
+import { Lobby } from '../pages/Lobby/components/Lobby';
 
 const RouteHandler = () => (
     <Box style={{ height: '89vh', width: '100%' }}>
