@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes /* Switch */ /* Link */ } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes /* HashRouter */ } from 'react-router-dom';
 import { Box } from '@material-ui/core';
 import { MainPage } from '../pages/mainPage/components/mainPage';
 import { Lobby } from '../pages/Lobby/components/Lobby';
@@ -7,17 +7,12 @@ import { Lobby } from '../pages/Lobby/components/Lobby';
 const RouteHandler = () => (
     <Box style={{ height: '89vh', width: '100%' }}>
         <Router>
-            {/* <Switch> */}
+            {/* <HashRouter> */}
             <Routes>
-                <Route path="/" element={<MainPage />}>
-                    {/* <Route exact path="/"> */}
-                    {/* <MainPage /> */}
-                </Route>
-                <Route path="/lobby" element={<Lobby />}>
-                    {/* <Lobby /> */}
-                </Route>
+                <Route path="/" element={<MainPage />}></Route>
+                <Route path="/lobby" element={<Lobby />}></Route>
             </Routes>
-            {/* </Switch> */}
+            {/* </HashRouter> */}
         </Router>
     </Box>
 );
