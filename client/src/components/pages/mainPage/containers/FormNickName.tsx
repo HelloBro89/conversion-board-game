@@ -19,6 +19,7 @@ const FormNickName = () => {
         const matchedValue = nickValue.match(regexp);
 
         if (matchedValue) {
+            localStorage.setItem('nickName', nickValue);
             dispatch(setNickName(nickValue));
         } else {
             e.target.setSelectionRange(0, 0);
@@ -38,7 +39,6 @@ const FormNickName = () => {
     const pushEnter = (e: KeyboardEvent) => {
         if (e.code === 'Enter' || e.code === 'NumpadEnter') {
             const elemTest = ref.current as HTMLElement;
-            console.log('PUSH');
             elemTest.click();
         }
         return;
