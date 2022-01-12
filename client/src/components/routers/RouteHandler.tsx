@@ -10,7 +10,7 @@ const RouteHandler = () => (
             {/* <HashRouter> */}
             <Routes>
                 <Route path="/" element={<MainPage />}></Route>
-                <Route path="/lobby" element={<Lobby />}></Route>
+                <Route path="/lobby/:nickName" element={<Lobby />}></Route>
             </Routes>
             {/* </HashRouter> */}
         </Router>

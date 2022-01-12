@@ -19,7 +19,7 @@ const FormNickName = () => {
         const matchedValue = nickValue.match(regexp);
 
         if (matchedValue) {
-            localStorage.setItem('nickName', nickValue);
+            // localStorage.setItem('nickName', nickValue);
             dispatch(setNickName(nickValue));
         } else {
             e.target.setSelectionRange(0, 0);
@@ -33,7 +33,7 @@ const FormNickName = () => {
             alert('Enter your nick-name!');
             return;
         }
-        console.log(searchNickName.nickName);
+        // console.log(searchNickName.nickName);
     };
 
     const pushEnter = (e: KeyboardEvent) => {
@@ -57,7 +57,13 @@ const FormNickName = () => {
                 value={searchNickName.nickName}
             />
             <nav>
-                <NavLink to="/lobby" ref={ref} id="send" onClick={(e) => getNickName(e)} className={classes.navStyle}>
+                <NavLink
+                    to={`/lobby/${searchNickName.nickName}`}
+                    ref={ref}
+                    id="send"
+                    onClick={(e) => getNickName(e)}
+                    className={classes.navStyle}
+                >
                     Enter
                 </NavLink>
             </nav>
