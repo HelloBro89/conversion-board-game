@@ -4,13 +4,13 @@ import { AppBar, Button, Toolbar, Box } from '@material-ui/core';
 import { useStyles } from './layoutStyle';
 import RouteHandler from './components/routers/RouteHandler';
 import { MenuListComposition } from './layoutElements/menuList';
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const socket = io('http://localhost:4000/');
 // import { ITaskList } from './Interfaces';} from './requests/requests';
 
 const App: FC = () => {
     const style = useStyles();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const socket = io('http://localhost:4000/');
+
     return (
         <Box>
             <Box>
@@ -26,7 +26,7 @@ const App: FC = () => {
                     </Toolbar>
                 </AppBar>
             </Box>
-            <Box /* style={{ marginTop: '10px' }} */>
+            <Box>
                 <RouteHandler />
             </Box>
 
