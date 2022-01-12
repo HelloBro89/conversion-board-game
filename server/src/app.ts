@@ -13,8 +13,10 @@ const { NODE_ENV } = config;
 app.use(Express.json());
 app.use(Express.urlencoded({ extended: false }));
 app.use(cors());
+
 console.log(`***** ${NODE_ENV} LENGTH ${NODE_ENV?.length}`);
-if (NODE_ENV === 'poduction') {
+
+if (NODE_ENV === 'production') {
     const pathToIndexHTML = path.join(__dirname, /* './' */ '../../client/build');
     app.use(Express.static(pathToIndexHTML));
 
@@ -24,8 +26,7 @@ if (NODE_ENV === 'poduction') {
 }
 
 io.on('connection', (socket) => {
-    console.log(`User connected***  --- ${socket.id}`);
-
+    console.log(`User connected***  --- ${socket.id}}`);
     // socket.on('disconnect', function () {
     //     console.log('A user disconnected');
     //     io.sockets.emit('checkWhoStayed');
