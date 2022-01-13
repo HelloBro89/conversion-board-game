@@ -39,7 +39,8 @@ export const useStyles = makeStyles(() =>
                 borderWidth: '2.5px',
                 borderColor: 'grey',
                 borderRadius: '10px',
-                background: 'rgb(100,100,100) radial-gradient(circle at 0 0, rgba(255,255,255,.65), rgba(255,255,255,.35))',
+                background:
+                    'rgb(100,100,100) radial-gradient(circle at 0 0, rgba(255,255,255,.65), rgba(255,255,255,.35))',
             },
         },
     })

@@ -16,7 +16,11 @@ const App: FC = () => {
             <Box>
                 <AppBar className={style.appBar}>
                     <Toolbar>
-                        <Button className={style.homePageBut} color="inherit" onClick={() => alert('Back to home page...')}>
+                        <Button
+                            className={style.homePageBut}
+                            color="inherit"
+                            onClick={() => alert('Back to home page...')}
+                        >
                             Home Page
                         </Button>
                         <Box className={style.menuList}>
@@ -31,8 +35,12 @@ const App: FC = () => {
             </Box>
 
             <Box className={style.bottomNav}>
-                <Box className={style.bottomNavText}>Here will be my post, git Repo and other contacts...</Box>
-                <Box className={style.bottomNavText}>Here will be my post, git Repo and other contacts...</Box>
+                <Box className={style.bottomNavText}>
+                    Here will be my post, git Repo and other contacts...
+                </Box>
+                <Box className={style.bottomNavText}>
+                    Here will be my post, git Repo and other contacts...
+                </Box>
             </Box>
         </Box>
     );
