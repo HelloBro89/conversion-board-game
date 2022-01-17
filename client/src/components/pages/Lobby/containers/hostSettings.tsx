@@ -13,7 +13,7 @@ export const HostSettings = () => {
                 <button onClick={() => dispatch(setModalStatus(false))} className={styles.btnIcon}>
                     <img className={styles.closeIcon} src={closedIcon}></img>
                 </button>
-                <div className={styles.test}>
+                <div /* className={styles.test} */>
                     <div>
                         Host name
                         <input type="text" name="" id="" />
