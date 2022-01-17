@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import nickNameReducer from './reducers/nickNameReducer';
+import appDataReducer from './reducers/appDataReducer';
 // import articlesReducer from './articlesReducer.jsx';
 
 export const rootReducer = combineReducers({
-    nickName: nickNameReducer,
+    appData: appDataReducer,
     // articles: articlesReducer
 });
 

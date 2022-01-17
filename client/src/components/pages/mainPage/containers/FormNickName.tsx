@@ -3,13 +3,14 @@ import { TextField, Box } from '@material-ui/core';
 import { NavLink } from 'react-router-dom';
 import { useStyles } from '../styleMainPage';
 import { useDispatch, useSelector } from 'react-redux';
-import { setNickName } from '../../../redux/actions/nickNameAction';
+// import io from 'socket.io-client';
+import { setNickName } from '../../../redux/actions/appDataAction';
 import { RootState } from '../../../redux';
 
 const FormNickName = () => {
     const ref = useRef<HTMLAnchorElement>(null);
     const classes = useStyles();
-    const searchNickName = useSelector((state: RootState) => state.nickName);
+    const searchNickName = useSelector((state: RootState) => state.appData);
     const dispatch = useDispatch();
 
     const handlerTextField = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -19,7 +20,6 @@ const FormNickName = () => {
         const matchedValue = nickValue.match(regexp);
 
         if (matchedValue) {
-            // localStorage.setItem('nickName', nickValue);
             dispatch(setNickName(nickValue));
         } else {
             e.target.setSelectionRange(0, 0);
@@ -33,7 +33,8 @@ const FormNickName = () => {
             alert('Enter your nick-name!');
             return;
         }
-        // console.log(searchNickName.nickName);
+        // "proxy": "http://localhost:4000/",
+        // io();
     };
 
     const pushEnter = (e: KeyboardEvent) => {

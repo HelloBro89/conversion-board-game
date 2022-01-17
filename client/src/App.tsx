@@ -1,11 +1,11 @@
 import React, { FC /* , ChangeEvent, useState, useEffect */ } from 'react';
-import io from 'socket.io-client';
+// import io from 'socket.io-client';
 import { AppBar, Button, Toolbar, Box } from '@material-ui/core';
 import { useStyles } from './layoutStyle';
 import RouteHandler from './components/routers/RouteHandler';
 import { MenuListComposition } from './layoutElements/menuList';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const socket = io('http://localhost:4000/');
+// const socket = io('http://localhost:4000/');
 // import { ITaskList } from './Interfaces';} from './requests/requests';
 
 const App: FC = () => {

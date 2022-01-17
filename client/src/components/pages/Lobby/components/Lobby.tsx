@@ -4,24 +4,33 @@ import { useDispatch, useSelector } from 'react-redux';
 import styles from '../lobbyStyle.module.css';
 import { ConnectInfo } from '../containers/ConnectInfo';
 import { RootState } from '../../../redux';
-import { setNickName } from '../../../redux/actions/nickNameAction';
+import { setNickName, setModalStatus } from '../../../redux/actions/appDataAction';
+import { HostSettings } from '../containers/hostSettings';
+// import { HostSettings } from '../containers/HostSettings';
 // import { useDispatch, useSelector } from 'react-redux';
 
 export const Lobby = () => {
     const dispatch = useDispatch();
-    const searchNickName = useSelector((state: RootState) => state.nickName);
+    const findNickName = useSelector((state: RootState) => state.appData.nickName);
+    // const findModalStatus = useSelector((state: RootState) => state.appData.modalStatus);
     const params = useParams();
 
     useEffect(() => {
         console.log(typeof params.nickName);
-        if (params.nickName !== searchNickName.nickName) {
+        if (params.nickName !== findNickName) {
             dispatch(setNickName(params.nickName!));
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const test = () => {
-        console.log(searchNickName.nickName);
+    const getHostMenu = () => {
+        dispatch(setModalStatus(true));
+        // console.log(findModalStatus);
     };
+
+    // const test = () => {
+    //     console.log(findModalStatus.status);
+    // };
 
     return (
         <div className={styles.container}>
@@ -33,9 +42,11 @@ export const Lobby = () => {
                 </div>
                 <ConnectInfo />
             </div>
-            <button onClick={test} className={styles.createHost}>
+            <button onClick={getHostMenu} className={styles.createHost}>
                 Create host
             </button>
+            {/* <button onClick={test}>test</button> */}
+            <HostSettings />
         </div>
     );
 };

@@ -35,7 +35,7 @@ export const useStyles = makeStyles(() =>
             justifyContent: 'center',
             alignItems: 'center',
             color: 'black',
-            '&:active': {
+            '&:hover': {
                 borderWidth: '2.5px',
                 borderColor: 'grey',
                 borderRadius: '10px',
