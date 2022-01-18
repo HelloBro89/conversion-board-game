@@ -14,17 +14,16 @@ const FormNickName = () => {
     const dispatch = useDispatch();
 
     const handlerTextField = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        e.preventDefault();
+        // e.preventDefault();
         const nickValue = e.currentTarget.value;
-        const regexp = /^\S/;
-        const matchedValue = nickValue.match(regexp);
+        console.log(nickValue);
+        // const regexp = /^\S/;
+        const regexp = /^\S*$/;
+        const matchedValue = nickValue.replace(regexp, '');
 
-        if (matchedValue) {
+        if (!matchedValue) {
             dispatch(setNickName(nickValue));
-        } else {
-            e.target.setSelectionRange(0, 0);
-            dispatch(setNickName(''));
-        }
+        } else alert('The space character is not allowed!');
     };
 
     const getNickName = (e: MouseEvent) => {

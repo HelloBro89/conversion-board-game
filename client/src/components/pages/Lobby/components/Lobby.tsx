@@ -12,11 +12,10 @@ import { HostSettings } from '../containers/hostSettings';
 export const Lobby = () => {
     const dispatch = useDispatch();
     const findNickName = useSelector((state: RootState) => state.appData.nickName);
-    // const findModalStatus = useSelector((state: RootState) => state.appData.modalStatus);
+    const findModalStatus = useSelector((state: RootState) => state.appData.modalStatus);
     const params = useParams();
 
     useEffect(() => {
-        console.log(typeof params.nickName);
         if (params.nickName !== findNickName) {
             dispatch(setNickName(params.nickName!));
         }

@@ -3,7 +3,7 @@
     flex-direction: column;
     align-items: center;
     /* justify-content: center; */
-    background-color: green;
+    /* background-color: green; */
 }
 
 .connectionList {
@@ -45,19 +45,13 @@
 }
 
 /* ************************* HOST SETTINGS ******************************/
-
 .hostContainer {
     transform: scale(0);
 }
 
 .activeModal {
-    /* width: 99vw;
-    height: 98vh; */
     width: 100%;
     height: 100%;
-    /* border-style: solid;
-    border-width: 2px; */
-    /* border-color: rgba(65, 61, 61, 0.774); */
     background-color: rgb(0, 0, 0, 0.4);
     position: fixed;
     display: flex;
@@ -67,9 +61,9 @@
 }
 
 .hostSettings {
-    width: 70%;
-    /* width: 15px; */
+    width: 60%;
     height: 50%;
+    min-height: 200px;
     border-style: solid;
     border-width: 2px;
     border-radius: 10px;
@@ -77,22 +71,41 @@
     background-color: white;
     display: flex;
     flex-direction: column;
+    overflow: auto;
 }
-.btnIcon {
+
+.blockCloseBtn {
+    /* background-color: red; */
     margin-left: auto;
+}
+
+.btnIcon {
     background-color: transparent;
     border: none;
 }
 .closeIcon {
-    width: 20px;
-    height: 20px;
-    padding-bottom: 15px;
+    width: 25px;
+    height: 25px;
+    /* padding-bottom: 15px; */
 }
 
-.closeIcon:hover {
-    width: 35px;
-    height: 35px;
-    padding-bottom: 0px;
+.btnIcon:hover {
+    border-radius: 50px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.774);
+}
+
+.inputHostName {
+    /* margin-top: 100px; */
+    display: flex;
+    justify-content: center;
+    margin-top: auto;
+}
+
+.selectNameTime {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 60px;
 }
 
 .footBtns {
@@ -101,16 +114,5 @@
     justify-content: space-around;
     /* background-color: red; */
     margin-top: auto;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
-
-/* .test { */
-/* display: flex; */
-/* flex-direction: column; */
-/* justify-content: center; */
-/* align-items: center; */
-/* background-color: rebeccapurple; */
-/* margin-top: auto; */
-/* margin-bottom: 100px; */
-/* margin-bottom: 50px; */
-/* } */
