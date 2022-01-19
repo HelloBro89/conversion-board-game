@@ -1,4 +1,4 @@
-import React, { ChangeEvent, MouseEvent, KeyboardEvent, useRef } from 'react';
+import React, { ChangeEvent, MouseEvent, useRef } from 'react';
 import { TextField, Box } from '@material-ui/core';
 import { NavLink } from 'react-router-dom';
 import { useStyles } from '../styleMainPage';
@@ -6,28 +6,16 @@ import { useDispatch, useSelector } from 'react-redux';
 // import io from 'socket.io-client';
 import { setNickName } from '../../../redux/actions/appDataAction';
 import { RootState } from '../../../redux';
+import { textFieldFilter, eventCode } from '../../../helpers/textFieldFilter';
 
 const FormNickName = () => {
-    const ref = useRef<HTMLAnchorElement>(null);
+    const enterRef = useRef<HTMLAnchorElement>(null);
     const classes = useStyles();
-    const searchNickName = useSelector((state: RootState) => state.appData);
+    const foundNickName = useSelector((state: RootState) => state.appData);
     const dispatch = useDispatch();
 
-    const handlerTextField = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        // e.preventDefault();
-        const nickValue = e.currentTarget.value;
-        console.log(nickValue);
-        // const regexp = /^\S/;
-        const regexp = /^\S*$/;
-        const matchedValue = nickValue.replace(regexp, '');
-
-        if (!matchedValue) {
-            dispatch(setNickName(nickValue));
-        } else alert('The space character is not allowed!');
-    };
-
     const getNickName = (e: MouseEvent) => {
-        if (searchNickName.nickName.trim() === '') {
+        if (foundNickName.nickName.trim() === '') {
             e.preventDefault();
             alert('Enter your nick-name!');
             return;
@@ -36,30 +24,47 @@ const FormNickName = () => {
         // io();
     };
 
-    const pushEnter = (e: KeyboardEvent) => {
-        if (e.code === 'Enter' || e.code === 'NumpadEnter') {
-            const elemTest = ref.current as HTMLElement;
-            elemTest.click();
-        }
-        return;
+    // const handlerTextField = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    //     // e.preventDefault();
+    //     const nickValue = e.currentTarget.value.trim();
+    //     if (nickValue.length > 5) {
+    //         alert('Maximum number of characters 20');
+    //         return;
+    //     }
+    //     console.log(nickValue);
+    //     dispatch(setNickName(nickValue));
+    // };
+
+    // const pushEnter = (e: KeyboardEvent) => {
+    //     if (e.code === 'Enter' || e.code === 'NumpadEnter') {
+    //         const refElem = enterRef.current as HTMLElement;
+    //         refElem.click();
+    //     } else if (e.code === 'Space') {
+    //         alert('The space character is not allowed!');
+    //     }
+    //     return;
+    // };
+
+    const handlerTextField = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const filteredValue = textFieldFilter(e);
+        dispatch(setNickName(filteredValue));
     };
 
     return (
         <Box className={classes.boxNickName}>
             <TextField
-                onKeyDown={(e) => pushEnter(e)}
+                onKeyDown={(e) => eventCode(e, enterRef)}
                 onChange={(e) => handlerTextField(e)}
                 className={classes.textField}
-                // id="filled-basic"
                 label="Enter your nick-name"
                 variant="filled"
                 autoComplete="off"
-                value={searchNickName.nickName}
+                value={foundNickName.nickName}
             />
             <nav>
                 <NavLink
-                    to={`/lobby/${searchNickName.nickName}`}
-                    ref={ref}
+                    to={`/lobby/${foundNickName.nickName}`}
+                    ref={enterRef}
                     id="send"
                     onClick={(e) => getNickName(e)}
                     className={classes.navStyle}

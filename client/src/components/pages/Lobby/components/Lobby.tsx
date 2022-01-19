@@ -11,12 +11,12 @@ import { HostSettings } from '../containers/hostSettings';
 
 export const Lobby = () => {
     const dispatch = useDispatch();
-    const findNickName = useSelector((state: RootState) => state.appData.nickName);
-    const findModalStatus = useSelector((state: RootState) => state.appData.modalStatus);
+    const foundNickName = useSelector((state: RootState) => state.appData.nickName);
+    // const findModalStatus = useSelector((state: RootState) => state.appData.modalStatus);
     const params = useParams();
 
     useEffect(() => {
-        if (params.nickName !== findNickName) {
+        if (params.nickName !== foundNickName) {
             dispatch(setNickName(params.nickName!));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -26,10 +26,6 @@ export const Lobby = () => {
         dispatch(setModalStatus(true));
         // console.log(findModalStatus);
     };
-
-    // const test = () => {
-    //     console.log(findModalStatus.status);
-    // };
 
     return (
         <div className={styles.container}>
@@ -44,7 +40,6 @@ export const Lobby = () => {
             <button onClick={getHostMenu} className={styles.createHost}>
                 Create host
             </button>
-            {/* <button onClick={test}>test</button> */}
             <HostSettings />
         </div>
     );
