@@ -9,10 +9,12 @@ export const textFieldFilter = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaEl
     return nickValue;
 };
 
-export const eventCode = (e: KeyboardEvent, enterRef: RefObject<HTMLAnchorElement>) => {
+export const eventCode = (e: KeyboardEvent, enterRef?: RefObject<HTMLAnchorElement>) => {
     if (e.code === 'Enter' || e.code === 'NumpadEnter') {
-        const refElem = enterRef.current as HTMLElement;
-        refElem.click();
+        if (enterRef) {
+            const refElem = enterRef.current as HTMLElement;
+            refElem.click();
+        }
     } else if (e.code === 'Space') {
         alert('The space character is not allowed!');
     }

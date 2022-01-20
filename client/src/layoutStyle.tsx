@@ -28,5 +28,9 @@ export const useStyles = makeStyles(() =>
             display: 'flex',
             justifyContent: 'center',
         },
+        goHomePageNav: {
+            color: 'white',
+            textDecoration: 'none',
+        },
     })
 );

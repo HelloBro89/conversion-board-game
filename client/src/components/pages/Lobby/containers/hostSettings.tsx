@@ -1,5 +1,5 @@
 // import React, { useRef } from 'react';
-import { FormEvent } from 'react';
+import { ChangeEvent, FormEvent } from 'react';
 import styles from '../lobbyStyle.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { TextField } from '@material-ui/core';
@@ -11,12 +11,12 @@ import {
     setModalStatus,
     setGameTime,
     setHostName,
+    // setNickName,
 } from '../../../redux/actions/appDataAction';
+import { textFieldFilter, eventCode } from '../../../helpers/textFieldFilter';
 
 export const HostSettings = () => {
     // const nodeRef = useRef(null);
-    // const findModalStatus = useSelector((state: RootState) => state.appData.modalStatus);
-    // const findNumberOfPlayers = useSelector((state: RootState) => state.appData.numOfPlayers);
     const data = useSelector((state: RootState) => state.appData);
     const dispatch = useDispatch();
     // const classes = useStyles();
@@ -26,6 +26,12 @@ export const HostSettings = () => {
         console.log(data);
         console.log(data.modalStatus);
     };
+
+    const handlerTextField = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const filteredValue = textFieldFilter(e);
+        dispatch(setHostName(filteredValue));
+    };
+
     return (
         <div className={data.modalStatus ? styles.activeModal : styles.hostContainer}>
             <div className={styles.hostSettings}>
@@ -40,10 +46,12 @@ export const HostSettings = () => {
                 <form onSubmit={(e) => formHandler(e)} action="" id="form1">
                     <div className={styles.inputHostName}>
                         <TextField
-                            onChange={(e) => dispatch(setHostName(e.currentTarget.value))}
+                            onKeyDown={(e) => eventCode(e)}
+                            onChange={(e) => handlerTextField(e)}
                             id="filled-basic"
                             label="Your host name"
                             variant="filled"
+                            value={data.hostName}
                         />
                     </div>
                     <div className={styles.selectNameTime}>
@@ -76,11 +84,7 @@ export const HostSettings = () => {
 
                     <div className={styles.footBtns}>
                         <div>
-                            <button
-                                type="submit" /* onClick={() => console.log(findNumberOfPlayers)} */
-                            >
-                                Create
-                            </button>
+                            <button type="submit">Create</button>
                         </div>
                         <div>
                             <button onClick={() => dispatch(setModalStatus(false))}>Cancel</button>

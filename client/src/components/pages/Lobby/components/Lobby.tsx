@@ -5,8 +5,7 @@ import styles from '../lobbyStyle.module.css';
 import { ConnectInfo } from '../containers/ConnectInfo';
 import { RootState } from '../../../redux';
 import { setNickName, setModalStatus } from '../../../redux/actions/appDataAction';
-import { HostSettings } from '../containers/hostSettings';
-// import { HostSettings } from '../containers/HostSettings';
+import { HostSettings } from '../containers/HostSettings';
 // import { useDispatch, useSelector } from 'react-redux';
 
 export const Lobby = () => {

@@ -1,6 +1,7 @@
 import React, { FC /* , ChangeEvent, useState, useEffect */ } from 'react';
 // import io from 'socket.io-client';
 import { AppBar, Button, Toolbar, Box } from '@material-ui/core';
+import { NavLink } from 'react-router-dom';
 import { useStyles } from './layoutStyle';
 import RouteHandler from './components/routers/RouteHandler';
 import { MenuListComposition } from './layoutElements/menuList';
@@ -16,13 +17,18 @@ const App: FC = () => {
             <Box>
                 <AppBar className={style.appBar}>
                     <Toolbar>
-                        <Button
+                        <nav>
+                            <NavLink className={style.goHomePageNav} to="/">
+                                HOME PAGE
+                            </NavLink>
+                        </nav>
+                        {/* <Button
                             className={style.homePageBut}
                             color="inherit"
                             onClick={() => alert('Back to home page...')}
                         >
                             Home Page
-                        </Button>
+                        </Button> */}
                         <Box className={style.menuList}>
                             <MenuListComposition />
                         </Box>

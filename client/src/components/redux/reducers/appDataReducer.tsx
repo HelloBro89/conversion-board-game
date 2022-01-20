@@ -16,7 +16,7 @@ const initialState = {
     modalStatus: false,
     numOfPlayers: '2',
     gameTime: 'average',
-    hostName: 'Custom name',
+    hostName: '',
 };
 
 function nickNameReducer(state = initialState, action: { type: string; payload: any }) {
