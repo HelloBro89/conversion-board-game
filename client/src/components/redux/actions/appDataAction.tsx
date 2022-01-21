@@ -3,6 +3,7 @@ export const SET_STATUS_MODAL_WINDOW = 'SET_STATUS_MODAL_WINDOW';
 export const SET_NUMBER_OF_PLAYERS = 'SET_NUMBER_OF_PLAYERS';
 export const SET_GAME_TIME = 'SET_GAME_TIME';
 export const SET_HOST_NAME = 'SET_HOST_NAME';
+export const SET_SOCKET_HOST_DATA = 'SET_SOCKET_HOST_DATA';
 
 export function setNickName(value: string) {
     return {
@@ -33,6 +34,13 @@ export function setGameTime(value: string) {
 export function setHostName(value: string) {
     return {
         type: SET_HOST_NAME,
+        payload: value,
+    };
+}
+
+export function setHostSocketData(value: []) {
+    return {
+        type: SET_SOCKET_HOST_DATA,
         payload: value,
     };
 }

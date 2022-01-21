@@ -1,6 +1,6 @@
 import React, { FC /* , ChangeEvent, useState, useEffect */ } from 'react';
 // import io from 'socket.io-client';
-import { AppBar, Button, Toolbar, Box } from '@material-ui/core';
+import { AppBar, Toolbar, Box } from '@material-ui/core';
 import { NavLink } from 'react-router-dom';
 import { useStyles } from './layoutStyle';
 import RouteHandler from './components/routers/RouteHandler';

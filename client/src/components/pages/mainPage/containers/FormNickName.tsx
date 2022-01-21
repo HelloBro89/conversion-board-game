@@ -4,15 +4,20 @@ import { NavLink } from 'react-router-dom';
 import { useStyles } from '../styleMainPage';
 import { useDispatch, useSelector } from 'react-redux';
 // import io from 'socket.io-client';
+// import socketIOClient from 'socket.io-client';
 import { setNickName } from '../../../redux/actions/appDataAction';
 import { RootState } from '../../../redux';
 import { textFieldFilter, eventCode } from '../../../helpers/textFieldFilter';
+// const socket = socketIOClient();
 
 const FormNickName = () => {
     const enterRef = useRef<HTMLAnchorElement>(null);
     const classes = useStyles();
     const foundNickName = useSelector((state: RootState) => state.appData);
     const dispatch = useDispatch();
+    // socket.on('test', (arg: string) => {
+    //     console.log(arg);
+    // });
 
     const getNickName = (e: MouseEvent) => {
         if (foundNickName.nickName.trim() === '') {
@@ -21,37 +26,25 @@ const FormNickName = () => {
             return;
         }
         // "proxy": "http://localhost:4000/",
-        // io();
+        // const socket = socketIOClient();
+        // socket.once('test', (arg: string) => {
+        //     console.log(arg); // world
+        // });
     };
-
-    // const handlerTextField = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    //     // e.preventDefault();
-    //     const nickValue = e.currentTarget.value.trim();
-    //     if (nickValue.length > 5) {
-    //         alert('Maximum number of characters 20');
-    //         return;
-    //     }
-    //     console.log(nickValue);
-    //     dispatch(setNickName(nickValue));
-    // };
-
-    // const pushEnter = (e: KeyboardEvent) => {
-    //     if (e.code === 'Enter' || e.code === 'NumpadEnter') {
-    //         const refElem = enterRef.current as HTMLElement;
-    //         refElem.click();
-    //     } else if (e.code === 'Space') {
-    //         alert('The space character is not allowed!');
-    //     }
-    //     return;
-    // };
 
     const handlerTextField = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const filteredValue = textFieldFilter(e);
         dispatch(setNickName(filteredValue));
     };
 
+    const test = () => {
+        console.log('pre TEST');
+        // socket.emit('test', 'Hello User');
+    };
+
     return (
         <Box className={classes.boxNickName}>
+            <button onClick={test}>TEST</button>
             <TextField
                 onKeyDown={(e) => eventCode(e, enterRef)}
                 onChange={(e) => handlerTextField(e)}

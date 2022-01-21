@@ -1,27 +1,36 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import socketIOClient from 'socket.io-client';
 import styles from '../lobbyStyle.module.css';
 import { ConnectInfo } from '../containers/ConnectInfo';
 import { RootState } from '../../../redux';
 import { setNickName, setModalStatus } from '../../../redux/actions/appDataAction';
+import { setHostData } from '../../../redux/actions/socketsDataAction';
 import { HostSettings } from '../containers/HostSettings';
-// import { useDispatch, useSelector } from 'react-redux';
 
 export const Lobby = () => {
     const dispatch = useDispatch();
     const foundNickName = useSelector((state: RootState) => state.appData.nickName);
+    const foundHostDate = useSelector((state: RootState) => state.socketsData.socketData);
     // const findModalStatus = useSelector((state: RootState) => state.appData.modalStatus);
     const params = useParams();
 
     useEffect(() => {
+        const socket = socketIOClient();
+        socket.on('hostsData', (arg: []) => {
+            dispatch(setHostData(arg));
+        });
+        // window.onbeforeunload = () => {
+        //     return true;
+        // };
         if (params.nickName !== foundNickName) {
             dispatch(setNickName(params.nickName!));
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const getHostMenu = () => {
+        // console.log(foundHostDate[0]);
         dispatch(setModalStatus(true));
         // console.log(findModalStatus);
     };

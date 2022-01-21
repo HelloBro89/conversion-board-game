@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import appDataReducer from './reducers/appDataReducer';
-// import articlesReducer from './articlesReducer.jsx';
+import socketsDataReducer from './reducers/socketsDataReducer';
 
 export const rootReducer = combineReducers({
     appData: appDataReducer,
-    // articles: articlesReducer
+    socketsData: socketsDataReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

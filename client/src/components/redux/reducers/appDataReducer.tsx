@@ -19,7 +19,7 @@ const initialState = {
     hostName: '',
 };
 
-function nickNameReducer(state = initialState, action: { type: string; payload: any }) {
+function appDataReducer(state = initialState, action: { type: string; payload: any }) {
     switch (action.type) {
         case SET_NICK_NAME:
             return { ...state, nickName: action.payload };
@@ -36,4 +36,4 @@ function nickNameReducer(state = initialState, action: { type: string; payload: 
             return state;
     }
 }
-export default nickNameReducer;
+export default appDataReducer;

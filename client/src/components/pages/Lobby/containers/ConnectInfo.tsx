@@ -1,12 +1,33 @@
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux';
+// import { setHostData } from '../../../redux/actions/socketsDataAction';
 import styles from '../lobbyStyle.module.css';
 export const ConnectInfo = () => {
-    // const dispatch = useDispatch();
-    // const searchNickName = useSelector((state: RootState) => state.nickName);
+    const foundHostDate = useSelector((state: RootState) => state.socketsData.socketData);
     return (
-        <div className={styles.connectInfo}>
-            <div className={styles.firstCol}>Test HOST</div>
-            <div className={styles.secondCol}>Long</div>
-            <div className={styles.thirdCol}>3</div>
+        <div>
+            {foundHostDate.length ? (
+                <div>
+                    {foundHostDate.map((item, ind) => (
+                        <div className={styles.connectInfo} key={ind}>
+                            <div className={styles.firstCol}>{item.hostName}</div>
+                            <div className={styles.secondCol}>{item.gameTime}</div>
+                            <div className={styles.thirdCol}>{item.numOfPlayers}</div>
+                        </div>
+                    ))}
+                </div>
+            ) : null}
         </div>
     );
 };
+
+// ************************************** OLDER *****************
+{
+    /* <div className={styles.connectInfo}>
+    <div key={ind}>
+        <div className={styles.firstCol}>{item.hostName}</div>
+        <div className={styles.secondCol}>{item.gameTime}</div>
+        <div className={styles.thirdCol}>{item.numOfPlayers}</div>
+    </div>
+</div>; */
+}
