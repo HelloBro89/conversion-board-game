@@ -37,14 +37,14 @@ const FormNickName = () => {
         dispatch(setNickName(filteredValue));
     };
 
-    const test = () => {
-        console.log('pre TEST');
-        // socket.emit('test', 'Hello User');
-    };
+    // const test = () => {
+    //     console.log('pre TEST');
+    //     // socket.emit('test', 'Hello User');
+    // };
 
     return (
         <Box className={classes.boxNickName}>
-            <button onClick={test}>TEST</button>
+            {/* <button onClick={test}>TEST</button> */}
             <TextField
                 onKeyDown={(e) => eventCode(e, enterRef)}
                 onChange={(e) => handlerTextField(e)}

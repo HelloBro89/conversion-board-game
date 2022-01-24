@@ -18,13 +18,19 @@ import { textFieldFilter, eventCode } from '../../../helpers/textFieldFilter';
 export const HostSettings = () => {
     // const nodeRef = useRef(null);
     const data = useSelector((state: RootState) => state.appData);
+    const socketClient = useSelector((state: RootState) => state.socketsData.socketClient);
     const dispatch = useDispatch();
     // const classes = useStyles();
 
     const formHandler = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const newHostData = {
+            numOfPlayers: data.numOfPlayers,
+            gameTime: data.gameTime,
+            hostName: data.hostName,
+        };
+        socketClient.emit('newHost', newHostData);
         console.log(data);
-        console.log(data.modalStatus);
     };
 
     const handlerTextField = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -86,8 +92,15 @@ export const HostSettings = () => {
                         <div>
                             <button type="submit">Create</button>
                         </div>
+
                         <div>
-                            <button onClick={() => dispatch(setModalStatus(false))}>Cancel</button>
+                            <button
+                                onClick={(e) => {
+                                    e.preventDefault(), dispatch(setModalStatus(false));
+                                }}
+                            >
+                                Cancel
+                            </button>
                         </div>
                     </div>
                 </form>

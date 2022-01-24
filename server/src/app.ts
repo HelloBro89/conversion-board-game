@@ -24,29 +24,39 @@ if (NODE_ENV === 'production') {
         res.status(200);
     });
 }
-
-const countOfUsers: string[] = [];
-const dataHosts = [{ numOfPlayers: '2', gameTime: 'average', hostName: 'FROM HOST' }];
+interface IHostData {
+    numOfPlayers: string;
+    gameTime: string;
+    hostName: string;
+}
+// const countOfUsers: string[] = [];
+let hosts: IHostData[] = [
+    // { numOfPlayers: '2', gameTime: 'average', hostName: 'FROM HOST' },
+    // { numOfPlayers: '2', gameTime: 'average', hostName: 'FROM HOST' },
+];
 
 io.on('connection', (socket) => {
+    // console.log(hosts);
     console.log(`User connected***  --- ${socket.id}}`);
-    countOfUsers.push(socket.id);
+    // countOfUsers.push(socket.id);
     // console.log(countOfUsers.length);
-    socket.emit('hostsData', dataHosts);
+    io.sockets.emit('hostsData', hosts);
+
+    socket.on('newHost', (dataHost) => {
+        hosts.push(dataHost);
+        io.sockets.emit('hostsData', hosts);
+        // socket.emit('newDataHost', hosts);
+        console.log(hosts);
+    });
     // socket.on('test', (arg: string) => {
     //     console.log(arg);
     // });
     socket.on('disconnect', () => {
-        countOfUsers.pop();
-        console.log(countOfUsers.length);
+        // countOfUsers.pop();
+        // console.log(countOfUsers.length);
         console.log('A user disconnected');
         // io.sockets.emit('user disconnedted');
     });
-
-    // console.log('A user disconnected');
-    // countOfUsers.pop();
-    // console.log(countOfUsers.length);
-    // io.sockets.emit('checkWhoStayed');
 });
 
 export { http };

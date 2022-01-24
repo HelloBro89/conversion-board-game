@@ -6,21 +6,26 @@ import styles from '../lobbyStyle.module.css';
 import { ConnectInfo } from '../containers/ConnectInfo';
 import { RootState } from '../../../redux';
 import { setNickName, setModalStatus } from '../../../redux/actions/appDataAction';
-import { setHostData } from '../../../redux/actions/socketsDataAction';
+import { setHostData, setSocketConnection } from '../../../redux/actions/socketsDataAction';
 import { HostSettings } from '../containers/HostSettings';
 
 export const Lobby = () => {
     const dispatch = useDispatch();
     const foundNickName = useSelector((state: RootState) => state.appData.nickName);
-    const foundHostDate = useSelector((state: RootState) => state.socketsData.socketData);
+    // const foundHostDate = useSelector((state: RootState) => state.socketsData.socketData);
     // const findModalStatus = useSelector((state: RootState) => state.appData.modalStatus);
     const params = useParams();
 
     useEffect(() => {
+        // const socket = socketIOClient();
         const socket = socketIOClient();
-        socket.on('hostsData', (arg: []) => {
-            dispatch(setHostData(arg));
+        console.log('USE EFFECT');
+        // console.log(socket.open());
+        dispatch(setSocketConnection(socket));
+        socket.on('hostsData', (data: []) => {
+            dispatch(setHostData(data));
         });
+
         // window.onbeforeunload = () => {
         //     return true;
         // };
