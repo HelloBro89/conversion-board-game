@@ -1,29 +1,25 @@
-import { SET_SOCKET_HOST_DATA, SET_SOCKET_CONNECTION } from '../actions/socketsDataAction';
-interface ISocketData {
-    numOfPlayers: string;
-    gameTime: string;
-    hostName: string;
-}
-
-interface IInitialState {
-    socketData: ISocketData[];
-    socketClient: any;
-}
+import {
+    SET_SOCKET_HOST_DATA,
+    SET_SOCKET_CONNECTION,
+    SET_PLAYER_NAMES,
+} from '../actions/socketsDataAction';
+import { IInitialState } from '../../interfaces/Interfaces';
 
 const initialState: IInitialState = {
-    socketData: [
-        // { numOfPlayers: '2', gameTime: 'average', hostName: 'TEST TWO name' },
-        // { numOfPlayers: '2', gameTime: 'average', hostName: 'TEST TWO name' },
-    ],
-    socketClient: {},
+    hostsData: [],
+    connectedSocket: {},
+    playerNames: ['Pasha', 'Veronika', 'Lucky'],
 };
 
-function socketsDataReducer(state = initialState, action: { type: string; payload: [] }) {
+function socketsDataReducer(state = initialState, action: { type: string; payload: any }) {
+    // console.log(state);
     switch (action.type) {
         case SET_SOCKET_HOST_DATA:
-            return { ...state, socketData: action.payload };
+            return { ...state, hostsData: action.payload };
         case SET_SOCKET_CONNECTION:
-            return { ...state, socketClient: action.payload };
+            return { ...state, connectedSocket: action.payload };
+        case SET_PLAYER_NAMES:
+            return { ...state, playerNames: action.payload };
 
         default:
             return state;

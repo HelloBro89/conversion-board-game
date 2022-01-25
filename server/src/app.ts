@@ -46,7 +46,7 @@ io.on('connection', (socket) => {
         hosts.push(dataHost);
         io.sockets.emit('hostsData', hosts);
         // socket.emit('newDataHost', hosts);
-        console.log(hosts);
+        // console.log(hosts);
     });
     // socket.on('test', (arg: string) => {
     //     console.log(arg);
@@ -54,7 +54,7 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         // countOfUsers.pop();
         // console.log(countOfUsers.length);
-        console.log('A user disconnected');
+        console.log(`A user disconnected ${socket.id}`);
         // io.sockets.emit('user disconnedted');
     });
 });

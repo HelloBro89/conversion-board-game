@@ -15,9 +15,6 @@ const FormNickName = () => {
     const classes = useStyles();
     const foundNickName = useSelector((state: RootState) => state.appData);
     const dispatch = useDispatch();
-    // socket.on('test', (arg: string) => {
-    //     console.log(arg);
-    // });
 
     const getNickName = (e: MouseEvent) => {
         if (foundNickName.nickName.trim() === '') {
@@ -26,10 +23,6 @@ const FormNickName = () => {
             return;
         }
         // "proxy": "http://localhost:4000/",
-        // const socket = socketIOClient();
-        // socket.once('test', (arg: string) => {
-        //     console.log(arg); // world
-        // });
     };
 
     const handlerTextField = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -37,14 +30,8 @@ const FormNickName = () => {
         dispatch(setNickName(filteredValue));
     };
 
-    // const test = () => {
-    //     console.log('pre TEST');
-    //     // socket.emit('test', 'Hello User');
-    // };
-
     return (
         <Box className={classes.boxNickName}>
-            {/* <button onClick={test}>TEST</button> */}
             <TextField
                 onKeyDown={(e) => eventCode(e, enterRef)}
                 onChange={(e) => handlerTextField(e)}
@@ -54,17 +41,17 @@ const FormNickName = () => {
                 autoComplete="off"
                 value={foundNickName.nickName}
             />
-            <nav>
-                <NavLink
-                    to={`/lobby/${foundNickName.nickName}`}
-                    ref={enterRef}
-                    id="send"
-                    onClick={(e) => getNickName(e)}
-                    className={classes.navStyle}
-                >
-                    Enter
-                </NavLink>
-            </nav>
+            {/* <nav> */}
+            <NavLink
+                to={`/lobby/${foundNickName.nickName}`}
+                ref={enterRef}
+                id="send"
+                onClick={(e) => getNickName(e)}
+                className={classes.navStyle}
+            >
+                Enter
+            </NavLink>
+            {/* </nav> */}
         </Box>
     );
 };

@@ -17,10 +17,8 @@ export const Lobby = () => {
     const params = useParams();
 
     useEffect(() => {
-        // const socket = socketIOClient();
         const socket = socketIOClient();
-        console.log('USE EFFECT');
-        // console.log(socket.open());
+        console.log(`USE EFFECT `);
         dispatch(setSocketConnection(socket));
         socket.on('hostsData', (data: []) => {
             dispatch(setHostData(data));
@@ -35,9 +33,7 @@ export const Lobby = () => {
     }, []);
 
     const getHostMenu = () => {
-        // console.log(foundHostDate[0]);
         dispatch(setModalStatus(true));
-        // console.log(findModalStatus);
     };
 
     return (

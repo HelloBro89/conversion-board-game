@@ -3,6 +3,7 @@ import { /* BrowserRouter as Router, */ Route, Routes /* HashRouter */ } from 'r
 import { Box } from '@material-ui/core';
 import { MainPage } from '../pages/mainPage/components/mainPage';
 import { Lobby } from '../pages/Lobby/components/Lobby';
+import { HostRoom } from '../pages/HostRoom/HostRoom';
 
 const RouteHandler = () => (
     <Box style={{ height: '89vh', width: '100%' }}>
@@ -11,6 +12,7 @@ const RouteHandler = () => (
         <Routes>
             <Route path="/" element={<MainPage />}></Route>
             <Route path="/lobby/:nickName" element={<Lobby />}></Route>
+            <Route path="/hostRoom/:hostName" element={<HostRoom />}></Route>
         </Routes>
         {/* </HashRouter> */}
         {/* </Router> */}
