@@ -17,11 +17,9 @@ import {
 import { textFieldFilter, eventCode } from '../../../helpers/textFieldFilter';
 
 export const HostSettings = () => {
-    // const nodeRef = useRef(null);
     const data = useSelector((state: RootState) => state.appData);
     const socketClient = useSelector((state: RootState) => state.socketsData.connectedSocket);
     const dispatch = useDispatch();
-    // const classes = useStyles();
 
     const formHandler = (/* e: MouseEvent,  FormEvent<HTMLFormElement> */) => {
         // e.preventDefault();
@@ -30,9 +28,7 @@ export const HostSettings = () => {
             gameTime: data.gameTime,
             hostName: data.hostName,
         };
-        // console.log(socketClient);
         socketClient.emit('newHost', newHostData);
-        // console.log(data);
     };
 
     const handlerTextField = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -95,9 +91,6 @@ export const HostSettings = () => {
                 </div>
 
                 <div className={styles.footBtns}>
-                    {/* <div>
-                        <button onClick={formHandler}>Create</button>
-                    </div> */}
                     <div>
                         <NavLink
                             to={`/hostRoom/${data.hostName}`}

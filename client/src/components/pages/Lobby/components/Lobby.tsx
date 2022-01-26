@@ -5,34 +5,49 @@ import socketIOClient from 'socket.io-client';
 import styles from '../lobbyStyle.module.css';
 import { ConnectInfo } from '../containers/ConnectInfo';
 import { RootState } from '../../../redux';
-import { setNickName, setModalStatus } from '../../../redux/actions/appDataAction';
+import { setNickName, setModalStatus, setRoomName } from '../../../redux/actions/appDataAction';
 import { setHostData, setSocketConnection } from '../../../redux/actions/socketsDataAction';
 import { HostSettings } from '../containers/HostSettings';
 
 export const Lobby = () => {
     const dispatch = useDispatch();
-    const foundNickName = useSelector((state: RootState) => state.appData.nickName);
-    // const foundHostDate = useSelector((state: RootState) => state.socketsData.socketData);
-    // const findModalStatus = useSelector((state: RootState) => state.appData.modalStatus);
     const params = useParams();
+    const foundNickName = useSelector((state: RootState) => state.appData.nickName);
+    const socketClient = useSelector((state: RootState) => state.socketsData.connectedSocket);
+    const foundRoomName = useSelector((state: RootState) => state.appData.roomName);
 
     useEffect(() => {
+        console.log(`USE EFFECT --- LOBBY`);
+        console.log(`********* ${params.nickName} - ${foundNickName}`);
+
+        if (params.nickName !== foundNickName) {
+            dispatch(setNickName(params.nickName!));
+        }
+        if (Object.keys(socketClient).length !== 0) {
+            if (foundRoomName !== '') {
+                console.log(`User left ${socketClient.id}`);
+                // socketClient.disconnect();
+                socketClient.emit('leaveTheRoom', foundRoomName);
+                socketClient.removeAllListeners('connectToRoom'); // важная штука - удаляет событие
+                dispatch(setRoomName(''));
+            }
+            return;
+        }
+
         const socket = socketIOClient();
-        console.log(`USE EFFECT `);
         dispatch(setSocketConnection(socket));
         socket.on('hostsData', (data: []) => {
+            console.log('HOST DAATA');
             dispatch(setHostData(data));
         });
 
         // window.onbeforeunload = () => {
         //     return true;
         // };
-        if (params.nickName !== foundNickName) {
-            dispatch(setNickName(params.nickName!));
-        }
     }, []);
 
     const getHostMenu = () => {
+        // console.log(foundRoomName);
         dispatch(setModalStatus(true));
     };
 

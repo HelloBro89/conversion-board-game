@@ -31,26 +31,43 @@ interface IHostData {
 }
 // const countOfUsers: string[] = [];
 let hosts: IHostData[] = [
-    // { numOfPlayers: '2', gameTime: 'average', hostName: 'FROM HOST' },
-    // { numOfPlayers: '2', gameTime: 'average', hostName: 'FROM HOST' },
+    // { numOfPlayers: '2', gameTime: 'average', hostName: 'FOR TEST' }
 ];
 
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
     // console.log(hosts);
-    console.log(`User connected***  --- ${socket.id}}`);
     // countOfUsers.push(socket.id);
-    // console.log(countOfUsers.length);
     io.sockets.emit('hostsData', hosts);
 
-    socket.on('newHost', (dataHost) => {
+    socket.on('joinToRoom', async (mess) => {
+        // console.log(`User connected to room ${mess} --- USER ID ${socket.id}}`);
+
+        await socket.join(`${mess}`);
+
+        // console.log(`Joined to: room ${mess} `);
+        io.to(`${mess}`).emit('connectToRoom', `message to all users in - ${mess}`);
+
+        // io.sockets.to(`room ${mess}`).emit('connectToRoom', `USER LEFT - ${mess}`);
+    });
+
+    socket.on('leaveTheRoom', async (mess) => {
+        await socket.leave(`${mess}`);
+        console.log(`Leave from: ${mess} USER ID ${socket.id}`);
+        // io.to(`room ${mess}`).emit('connectToRoom', `USER LEFT - ${mess}`);
+        // io.sockets.to(`room ${mess}`).emit('connectToRoom', `USER LEFT - ${mess}`);
+    });
+
+    socket.on('newHost', async (dataHost) => {
         hosts.push(dataHost);
         io.sockets.emit('hostsData', hosts);
-        // socket.emit('newDataHost', hosts);
-        // console.log(hosts);
+        console.log(`Joined to: room ${dataHost.hostName} --- USER ID ${socket.id} `);
+        socket.join(`${dataHost.hostName}`);
     });
-    // socket.on('test', (arg: string) => {
-    //     console.log(arg);
+
+    // socket.on('disconnecting', () => {
+    //     console.log(`************disconnecting ${JSON.stringify(socket.rooms)}`); // the Set contains at least the socket ID
     // });
+
     socket.on('disconnect', () => {
         // countOfUsers.pop();
         // console.log(countOfUsers.length);

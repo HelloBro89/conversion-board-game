@@ -4,6 +4,7 @@ export const SET_NUMBER_OF_PLAYERS = 'SET_NUMBER_OF_PLAYERS';
 export const SET_GAME_TIME = 'SET_GAME_TIME';
 export const SET_HOST_NAME = 'SET_HOST_NAME';
 export const SET_SOCKET_HOST_DATA = 'SET_SOCKET_HOST_DATA';
+export const SET_ROOM_NAME = 'SET_ROOM_NAME';
 
 export function setNickName(value: string) {
     return {
@@ -41,6 +42,12 @@ export function setHostName(value: string) {
 export function setHostSocketData(value: []) {
     return {
         type: SET_SOCKET_HOST_DATA,
+        payload: value,
+    };
+}
+export function setRoomName(value: string) {
+    return {
+        type: SET_ROOM_NAME,
         payload: value,
     };
 }

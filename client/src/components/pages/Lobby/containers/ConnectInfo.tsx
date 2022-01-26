@@ -1,19 +1,23 @@
-import { useSelector } from 'react-redux';
+import { MouseEvent } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { RootState } from '../../../redux';
-// import { setHostData } from '../../../redux/actions/socketsDataAction';
 import styles from '../lobbyStyle.module.css';
 import { IHostData } from '../../../interfaces/Interfaces';
-// import { NavLink } from 'react-router-dom';
+import { setRoomName } from '../../../redux/actions/appDataAction';
 
 export const ConnectInfo = () => {
+    const dispatch = useDispatch();
     const foundHostDate = useSelector((state: RootState) => state.socketsData.hostsData);
+    // const socketClient = useSelector((state: RootState) => state.socketsData.connectedSocket);
     const navigate = useNavigate();
 
-    const rootChange = () => {
-        const path = `/hostRoom/3`;
+    const rootChange = (e: MouseEvent) => {
+        const hostName = e.currentTarget.firstElementChild?.textContent;
+        dispatch(setRoomName(hostName!));
+        // socketClient.emit('joinToRoom', hostName);
+        const path = `/hostRoom/${hostName}`;
         navigate(path);
-        // alert('rootChange');
     };
     return (
         <div>
@@ -21,11 +25,9 @@ export const ConnectInfo = () => {
                 <div>
                     {foundHostDate.map((item: IHostData, ind: number) => (
                         <div
-                            onDoubleClick={rootChange}
+                            onDoubleClick={(e) => rootChange(e)}
                             key={ind}
-                            //  className={styles.connectInfo}}
                             className={ind % 2 === 0 ? styles.connectInfo : styles.connectInfoTwo}
-                            /* className={styles.connectInfo} */
                         >
                             <div className={styles.firstCol}>{item.hostName}</div>
                             <div className={styles.secondCol}>{item.gameTime}</div>
