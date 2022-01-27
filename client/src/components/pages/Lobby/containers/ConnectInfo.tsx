@@ -9,18 +9,21 @@ import { setRoomName } from '../../../redux/actions/appDataAction';
 export const ConnectInfo = () => {
     const dispatch = useDispatch();
     const foundHostDate = useSelector((state: RootState) => state.socketsData.hostsData);
+    const foundNickName = useSelector((state: RootState) => state.appData.nickName);
     // const socketClient = useSelector((state: RootState) => state.socketsData.connectedSocket);
     const navigate = useNavigate();
 
     const rootChange = (e: MouseEvent) => {
         const hostName = e.currentTarget.firstElementChild?.textContent;
+        console.log(`Joined to room --- ${hostName}`);
         dispatch(setRoomName(hostName!));
         // socketClient.emit('joinToRoom', hostName);
-        const path = `/hostRoom/${hostName}`;
+        const path = `/hostRoom/${hostName}?nickName=${foundNickName}`;
         navigate(path);
     };
     return (
         <div>
+            {console.log(`parsing hosts ${JSON.stringify(foundHostDate)}`)}
             {foundHostDate.length ? (
                 <div>
                     {foundHostDate.map((item: IHostData, ind: number) => (

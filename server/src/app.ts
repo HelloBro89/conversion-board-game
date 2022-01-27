@@ -30,14 +30,12 @@ interface IHostData {
     hostName: string;
 }
 // const countOfUsers: string[] = [];
-let hosts: IHostData[] = [
-    // { numOfPlayers: '2', gameTime: 'average', hostName: 'FOR TEST' }
-];
+let hosts: IHostData[] = [{ numOfPlayers: '2', gameTime: 'average', hostName: 'TEST' }];
 
 io.on('connection', async (socket) => {
-    // console.log(hosts);
-    // countOfUsers.push(socket.id);
-    io.sockets.emit('hostsData', hosts);
+    // io.sockets.emit('hostsData', hosts);
+    console.log(`The user is connected to the public room --- USER ID --- ${socket.id}} ---`);
+    socket.emit('hostsData', hosts);
 
     socket.on('joinToRoom', async (mess) => {
         // console.log(`User connected to room ${mess} --- USER ID ${socket.id}}`);
@@ -45,7 +43,9 @@ io.on('connection', async (socket) => {
         await socket.join(`${mess}`);
 
         // console.log(`Joined to: room ${mess} `);
-        io.to(`${mess}`).emit('connectToRoom', `message to all users in - ${mess}`);
+        // io.to(`${mess}`).emit('connectToRoom', `User has joined to room --- ${mess} --- USER ID --- ${socket.id} ---`);
+
+        socket.to(`${mess}`).emit('connectToRoom', `User has joined to room --- ${mess} --- USER ID --- ${socket.id} ---`);
 
         // io.sockets.to(`room ${mess}`).emit('connectToRoom', `USER LEFT - ${mess}`);
     });
@@ -55,13 +55,14 @@ io.on('connection', async (socket) => {
         console.log(`Leave from: ${mess} USER ID ${socket.id}`);
         // io.to(`room ${mess}`).emit('connectToRoom', `USER LEFT - ${mess}`);
         // io.sockets.to(`room ${mess}`).emit('connectToRoom', `USER LEFT - ${mess}`);
+        socket.to(`${mess}`).emit('connectToRoom', `User has left from room --- ${mess} --- USER ID --- ${socket.id} ---`);
     });
 
-    socket.on('newHost', async (dataHost) => {
-        hosts.push(dataHost);
-        io.sockets.emit('hostsData', hosts);
-        console.log(`Joined to: room ${dataHost.hostName} --- USER ID ${socket.id} `);
-        socket.join(`${dataHost.hostName}`);
+    socket.on('newHost', async (newHost) => {
+        hosts.push(newHost);
+        io.sockets.emit('addNewHost', newHost);
+        console.log(`Joined to: room ${newHost.hostName} --- USER ID ${socket.id} `);
+        socket.join(`${newHost.hostName}`);
     });
 
     // socket.on('disconnecting', () => {
