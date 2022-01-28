@@ -1,36 +1,49 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useParams, useSearchParams, useLocation } from 'react-router-dom';
 import socketIOClient from 'socket.io-client';
 import { RootState } from '../../redux';
 import { setNickName, setRoomName } from '../../redux/actions/appDataAction';
-import {
-    setHostData,
-    setNewHost,
-    setSocketConnection,
-} from '../../redux/actions/socketsDataAction';
+// import {
+//     setHostData,
+//     setNewHost,
+//     setSocketConnection,
+// } from '../../redux/actions/socketsDataAction';
+import { setMainEvents } from '../../helpers/setMainEvents';
 
 export const HostRoom = () => {
     const params = useParams();
+    const location = useLocation();
+    const navigate = useNavigate();
     const [searchParams /* setSearchParams */] = useSearchParams();
-    const foundNames = useSelector((state: RootState) => state.socketsData.playerNames);
-    const socketClient = useSelector((state: RootState) => state.socketsData.connectedSocket);
-    const foundRoomName = useSelector((state: RootState) => state.appData.roomName);
-    const foundNickName = useSelector((state: RootState) => state.appData.nickName);
+    const { playerNames, connectedSocket } = useSelector((state: RootState) => state.socketsData);
+    const { roomName, nickName } = useSelector((state: RootState) => state.appData);
+
     const dispatch = useDispatch();
     useEffect(() => {
         console.log(`USE EFFECT --- HOST ROOM`);
-        // console.log(`searchParams TEST ${searchParams.get('nickName')}`);
-        // console.log(`Are there SOCKETS ${socketClient}`);
-        // console.log(`Room name ${foundRoomName}`);
-        // console.log(`CHECK ROOM NAME from params.hostName  --- ${JSON.stringify(params.hostName)}`);
-        if (Object.keys(socketClient).length !== 0) {
-            // console.log('There is a SOCKET');
-            socketClient.emit('joinToRoom', params.hostName);
+        const locationParams = location.search;
 
-            // dispatch(setRoomName(params.hostName!));
-            // socketClient.removeAllListeners('hostsData');
-            socketClient.on(`connectToRoom`, (data: any) => {
+        console.log(locationParams);
+
+        const windowLocationHref = window.location.href;
+        const neededParams = windowLocationHref.split('/')[4].split('=')[1];
+
+        const fullPathForcomparison = `/hostRoom/${params.hostName}?nickName=${neededParams}`;
+        const comparisonPathSecond = `/hostRoom/${params.hostName}?nickName=${neededParams}/`;
+
+        if (
+            fullPathForcomparison !== `${location.pathname}${locationParams}` &&
+            comparisonPathSecond !== `${location.pathname}${locationParams}`
+        ) {
+            navigate('/error');
+        }
+
+        if (Object.keys(connectedSocket).length !== 0) {
+            // console.log('There is a SOCKET');
+            connectedSocket.emit('joinToRoom', params.hostName);
+            connectedSocket.on(`connectToRoom`, (data: any) => {
                 console.log(data);
             });
             return;
@@ -38,37 +51,35 @@ export const HostRoom = () => {
         const nickName = searchParams.get('nickName');
         dispatch(setNickName(nickName!));
         dispatch(setRoomName(params.hostName!));
+
         const socket = socketIOClient();
-        dispatch(setSocketConnection(socket));
+        setMainEvents(socket, (setAction) => dispatch(setAction));
+
         socket.emit('joinToRoom', params.hostName);
-        socket.on(`connectToRoom`, (data: any) => {
+
+        socket.on(`connectToRoom`, (data) => {
             console.log('TEST connectToRoom ' + data);
         });
-        socket.on('addNewHost', (data: any) => {
-            dispatch(setNewHost(data));
-            console.log(`added new host ${JSON.stringify(data)}`);
-        });
 
-        socket.on('hostsData', (data: []) => {
-            console.log(`All hosts --- ${JSON.stringify(data)}`);
-            dispatch(setHostData(data));
-        });
         // window.onbeforeunload = () => {
         //     return true;
         // };
     }, []);
 
     const test = () => {
-        console.log(foundNickName);
-        console.log(`room name ${foundRoomName}`);
+        console.log(`Current socket in redux: ${connectedSocket}`);
+        console.log(`Current nickName in redux ${nickName}`);
+        console.log(`Current room-name in redux ${roomName}`);
     };
 
     return (
         <div>
-            <button style={{ marginTop: '100px' }} onClick={test}></button>
-            {foundNames.length ? (
+            <button style={{ marginTop: '100px' }} onClick={test}>
+                view data
+            </button>
+            {playerNames.length ? (
                 <div style={{ marginTop: '200px' }}>
-                    {foundNames.map((item: string, ind: number) => (
+                    {playerNames.map((item: string, ind: number) => (
                         <div key={ind}>{item}</div>
                     ))}
                 </div>

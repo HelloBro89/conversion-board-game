@@ -15,15 +15,18 @@ export const ConnectInfo = () => {
 
     const rootChange = (e: MouseEvent) => {
         const hostName = e.currentTarget.firstElementChild?.textContent;
-        console.log(`Joined to room --- ${hostName}`);
+        // console.log(`Joined to room --- ${hostName}`);
         dispatch(setRoomName(hostName!));
         // socketClient.emit('joinToRoom', hostName);
+        console.log(`CONNECTION PATH TO ROOM: ${`/hostRoom/${hostName}nickName=${foundNickName}`}`);
+
         const path = `/hostRoom/${hostName}?nickName=${foundNickName}`;
+
         navigate(path);
     };
     return (
         <div>
-            {console.log(`parsing hosts ${JSON.stringify(foundHostDate)}`)}
+            {/* {console.log(`parsing hosts ${JSON.stringify(foundHostDate)}`)} */}
             {foundHostDate.length ? (
                 <div>
                     {foundHostDate.map((item: IHostData, ind: number) => (

@@ -9,24 +9,25 @@ export interface IInitialState {
     playerNames: string[];
 }
 
-// export interface IPlayerNames {}
-
 export interface IHostData {
     numOfPlayers: string;
     gameTime: string;
     hostName: string;
 }
 
-// export interface ServerToClientEvents {
-//     noArg: () => void;
-//     basicEmit: (a: string, b: string, c: Buffer) => void;
-//     withAck: (d: string, callback: (e: number) => void) => void;
-// }
+// for SETTING FUNCTION
 
-// export interface ClientToServerEvents {
-//     hello: () => void;
-// }
+export interface ISetNewHost {
+    type: string;
+    payload: IHostData;
+}
 
-// export interface InterServerEvents {
-//     ping: () => void;
-// }
+export interface ISetHostsData {
+    type: string;
+    payload: IHostData[];
+}
+
+export interface ISetSocketConnection {
+    type: string;
+    payload: any;
+}

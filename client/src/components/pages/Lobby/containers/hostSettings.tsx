@@ -1,7 +1,7 @@
 // import React, { useRef } from 'react';
 import { ChangeEvent, FormEvent, MouseEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { TextField } from '@material-ui/core';
 import styles from '../lobbyStyle.module.css';
 // import { useStyles } from '../stylesLobby';
@@ -17,23 +17,27 @@ import {
 import { textFieldFilter, eventCode } from '../../../helpers/textFieldFilter';
 
 export const HostSettings = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const data = useSelector((state: RootState) => state.appData);
     const socketClient = useSelector((state: RootState) => state.socketsData.connectedSocket);
-    const dispatch = useDispatch();
+    const foundNickName = useSelector((state: RootState) => state.appData.nickName);
+    const foundHostName = useSelector((state: RootState) => state.appData.hostName);
 
-    const formHandler = (/* e: MouseEvent,  FormEvent<HTMLFormElement> */) => {
-        // e.preventDefault();
+    const handlerTextField = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const filteredValue = textFieldFilter(e);
+        dispatch(setHostName(filteredValue));
+    };
+
+    const butHandler = () => {
         const newHostData = {
             numOfPlayers: data.numOfPlayers,
             gameTime: data.gameTime,
             hostName: data.hostName,
         };
         socketClient.emit('newHost', newHostData);
-    };
-
-    const handlerTextField = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const filteredValue = textFieldFilter(e);
-        dispatch(setHostName(filteredValue));
+        const path = `/hostRoom/${foundHostName}?nickName=${foundNickName}`;
+        navigate(path);
     };
 
     return (
@@ -92,7 +96,8 @@ export const HostSettings = () => {
 
                 <div className={styles.footBtns}>
                     <div>
-                        <NavLink
+                        <button onClick={butHandler}>Create</button>
+                        {/* <NavLink
                             to={`/hostRoom/${data.hostName}`}
                             // ref={enterRef}
                             id="send"
@@ -101,7 +106,7 @@ export const HostSettings = () => {
                             // className={classes.navStyle}
                         >
                             Create
-                        </NavLink>
+                        </NavLink> */}
                     </div>
 
                     <div>

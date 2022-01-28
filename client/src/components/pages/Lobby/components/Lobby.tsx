@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import socketIOClient from 'socket.io-client';
@@ -6,12 +6,9 @@ import styles from '../lobbyStyle.module.css';
 import { ConnectInfo } from '../containers/ConnectInfo';
 import { RootState } from '../../../redux';
 import { setNickName, setModalStatus, setRoomName } from '../../../redux/actions/appDataAction';
-import {
-    setHostData,
-    setSocketConnection,
-    setNewHost,
-} from '../../../redux/actions/socketsDataAction';
+import { setSocketConnection } from '../../../redux/actions/socketsDataAction';
 import { HostSettings } from '../containers/HostSettings';
+import { setMainEvents } from '../../../helpers/setMainEvents';
 
 export const Lobby = () => {
     const dispatch = useDispatch();
@@ -19,15 +16,9 @@ export const Lobby = () => {
     const { nickName, roomName } = useSelector((state: RootState) => state.appData);
     const { connectedSocket, hostsData } = useSelector((state: RootState) => state.socketsData);
 
-    // const foundNickName = useSelector((state: RootState) => state.appData.nickName);
-    // const foundRoomName = useSelector((state: RootState) => state.appData.roomName);
-
-    // const connectedSocket = useSelector((state: RootState) => state.socketsData.connectedSocket);
-    // const foundHosts = useSelector((state: RootState) => state.socketsData.hostsData);
-
     useEffect(() => {
         console.log(`USE EFFECT --- LOBBY`);
-        console.log(connectedSocket);
+        // console.log(`Current socket in redux: ${connectedSocket}`);
 
         console.log(`********* ${params.nickName} - ${nickName}`);
 
@@ -48,18 +39,10 @@ export const Lobby = () => {
         }
 
         const socket = socketIOClient();
-        dispatch(setSocketConnection(socket));
+        console.log(typeof socket);
 
-        socket.on('addNewHost', (data) => {
-            dispatch(setNewHost(data));
-            console.log(`added new host ${JSON.stringify(data)}`);
-        });
-
-        socket.on('hostsData', (data: []) => {
-            console.log(`All hosts --- ${JSON.stringify(data)}`);
-            dispatch(setHostData(data));
-        });
-        console.log(`TEST`);
+        // dispatch(setSocketConnection(socket));
+        setMainEvents(socket, (setAction) => dispatch(setAction));
 
         // window.onbeforeunload = () => {
         //     return true;

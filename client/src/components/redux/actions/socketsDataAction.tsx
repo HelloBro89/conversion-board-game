@@ -4,7 +4,7 @@ export const SET_SOCKET_CONNECTION = 'SET_SOCKET_CONNECTION';
 export const SET_PLAYER_NAMES = 'SET_PLAYER_NAMES';
 export const SET_NEW_HOST = 'SET_NEW_HOST';
 
-export function setHostData(value: []) {
+export function setHostData(value: IHostData[]) {
     return {
         type: SET_SOCKET_HOST_DATA,
         payload: value,
