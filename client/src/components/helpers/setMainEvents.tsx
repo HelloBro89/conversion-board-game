@@ -12,7 +12,8 @@ export const setMainEvents = (
     dispatch: Dispatch<ISetNewHost | ISetHostsData | ISetSocketConnection>
 ) => {
     dispatch(setSocketConnection(socket));
-
+    // console.log(`SOCKET ID ${socket.id}`);
+    // console.log(socket);
     socket.on('addNewHost', (data: IHostData) => {
         dispatch(setNewHost(data));
         console.log(`added new host ${JSON.stringify(data)}`);

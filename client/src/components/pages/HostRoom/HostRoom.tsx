@@ -4,12 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useParams, useSearchParams, useLocation } from 'react-router-dom';
 import socketIOClient from 'socket.io-client';
 import { RootState } from '../../redux';
-import { setNickName, setRoomName } from '../../redux/actions/appDataAction';
-// import {
-//     setHostData,
-//     setNewHost,
-//     setSocketConnection,
-// } from '../../redux/actions/socketsDataAction';
+import { setHostName, setNickName } from '../../redux/actions/appDataAction';
 import { setMainEvents } from '../../helpers/setMainEvents';
 
 export const HostRoom = () => {
@@ -18,7 +13,7 @@ export const HostRoom = () => {
     const navigate = useNavigate();
     const [searchParams /* setSearchParams */] = useSearchParams();
     const { playerNames, connectedSocket } = useSelector((state: RootState) => state.socketsData);
-    const { roomName, nickName } = useSelector((state: RootState) => state.appData);
+    const { nickName } = useSelector((state: RootState) => state.appData);
 
     const dispatch = useDispatch();
     useEffect(() => {
@@ -46,18 +41,26 @@ export const HostRoom = () => {
         if (Object.keys(connectedSocket).length !== 0) {
             // console.log('There is a SOCKET');
             connectedSocket.emit('joinToRoom', params.hostName);
-            connectedSocket.on(`connectToRoom`, (data: any) => {
-                console.log(data);
-            });
+            connectedSocket.on(
+                `connectToRoom`,
+                (data: { message: string; masterHost?: boolean }) => {
+                    if (data.masterHost === false) {
+                        alert('Host has left this room !');
+                    } else if (data.masterHost === true) {
+                        alert('Prosto user pokinyl komnatu');
+                    } else {
+                        console.log(data.message);
+                    }
+                }
+            );
             return;
         }
         const nickName = searchParams.get('nickName');
         dispatch(setNickName(nickName!));
-        dispatch(setRoomName(params.hostName!));
+        dispatch(setHostName(params.hostName!));
 
         const socket = socketIOClient();
         setMainEvents(socket, (setAction) => dispatch(setAction));
-
         socket.emit('joinToRoom', params.hostName);
 
         socket.on(`connectToRoom`, (data) => {
@@ -70,10 +73,13 @@ export const HostRoom = () => {
     }, []);
 
     const test = () => {
+        console.log(`Socket ID ${connectedSocket.id}`);
         console.log('Current socket in redux: ');
         console.log(connectedSocket);
+        // console.log(`Socket rooms:`);
+        // console.log(connectedSocket.rooms);
         console.log(`Current nickName in redux ${nickName}`);
-        console.log(`Current room-name in redux ${roomName}`);
+        // console.log(`Current room-name in redux ${roomName}`);
     };
 
     return (

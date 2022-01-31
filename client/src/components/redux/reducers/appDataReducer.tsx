@@ -4,7 +4,6 @@ import {
     SET_NUMBER_OF_PLAYERS,
     SET_GAME_TIME,
     SET_HOST_NAME,
-    SET_ROOM_NAME,
 } from '../actions/appDataAction';
 
 // interface IInitialState {
@@ -18,7 +17,7 @@ const initialState = {
     numOfPlayers: '2',
     gameTime: 'average',
     hostName: '',
-    roomName: '',
+    // roomName: '',
 };
 
 function appDataReducer(state = initialState, action: { type: string; payload: any }) {
@@ -33,8 +32,8 @@ function appDataReducer(state = initialState, action: { type: string; payload: a
             return { ...state, gameTime: action.payload };
         case SET_HOST_NAME:
             return { ...state, hostName: action.payload };
-        case SET_ROOM_NAME:
-            return { ...state, roomName: action.payload };
+        // case SET_ROOM_NAME:
+        //     return { ...state, roomName: action.payload };
 
         default:
             return state;

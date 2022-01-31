@@ -4,34 +4,34 @@ import { useNavigate } from 'react-router-dom';
 import { RootState } from '../../../redux';
 import styles from '../lobbyStyle.module.css';
 import { IHostData } from '../../../interfaces/Interfaces';
-import { setRoomName } from '../../../redux/actions/appDataAction';
+import { setHostName } from '../../../redux/actions/appDataAction';
 
 export const ConnectInfo = () => {
     const dispatch = useDispatch();
-    const foundHostDate = useSelector((state: RootState) => state.socketsData.hostsData);
-    const foundNickName = useSelector((state: RootState) => state.appData.nickName);
+    const { hostsData } = useSelector((state: RootState) => state.socketsData);
+    const { nickName } = useSelector((state: RootState) => state.appData);
     // const socketClient = useSelector((state: RootState) => state.socketsData.connectedSocket);
     const navigate = useNavigate();
 
-    const rootChange = (e: MouseEvent) => {
+    const hostSelection = (e: MouseEvent) => {
         const hostName = e.currentTarget.firstElementChild?.textContent;
         // console.log(`Joined to room --- ${hostName}`);
-        dispatch(setRoomName(hostName!));
+        dispatch(setHostName(hostName!));
         // socketClient.emit('joinToRoom', hostName);
-        console.log(`CONNECTION PATH TO ROOM: ${`/hostRoom/${hostName}nickName=${foundNickName}`}`);
+        console.log(`CONNECTION PATH TO ROOM: ${`/hostRoom/${hostName}nickName=${nickName}`}`);
 
-        const path = `/hostRoom/${hostName}?nickName=${foundNickName}`;
+        const path = `/hostRoom/${hostName}?nickName=${nickName}`;
 
         navigate(path);
     };
     return (
         <div>
             {/* {console.log(`parsing hosts ${JSON.stringify(foundHostDate)}`)} */}
-            {foundHostDate.length ? (
+            {hostsData.length ? (
                 <div>
-                    {foundHostDate.map((item: IHostData, ind: number) => (
+                    {hostsData.map((item: IHostData, ind: number) => (
                         <div
-                            onDoubleClick={(e) => rootChange(e)}
+                            onDoubleClick={(e) => hostSelection(e)}
                             key={ind}
                             className={ind % 2 === 0 ? styles.connectInfo : styles.connectInfoTwo}
                         >

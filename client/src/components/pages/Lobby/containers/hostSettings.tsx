@@ -19,29 +19,33 @@ import { textFieldFilter, eventCode } from '../../../helpers/textFieldFilter';
 export const HostSettings = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const data = useSelector((state: RootState) => state.appData);
-    const socketClient = useSelector((state: RootState) => state.socketsData.connectedSocket);
-    const foundNickName = useSelector((state: RootState) => state.appData.nickName);
-    const foundHostName = useSelector((state: RootState) => state.appData.hostName);
+    // const data = useSelector((state: RootState) => state.appData);
+    const { nickName, hostName, numOfPlayers, gameTime, modalStatus } = useSelector(
+        (state: RootState) => state.appData
+    );
+    // const foundNickName = useSelector((state: RootState) => state.appData.nickName);
+    // const foundHostName = useSelector((state: RootState) => state.appData.hostName);
+    const { connectedSocket } = useSelector((state: RootState) => state.socketsData);
 
     const handlerTextField = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const filteredValue = textFieldFilter(e);
         dispatch(setHostName(filteredValue));
     };
 
-    const butHandler = () => {
+    const createRoom = () => {
         const newHostData = {
-            numOfPlayers: data.numOfPlayers,
-            gameTime: data.gameTime,
-            hostName: data.hostName,
+            numOfPlayers: numOfPlayers,
+            gameTime: gameTime,
+            hostName: hostName,
+            hostID: connectedSocket.id,
         };
-        socketClient.emit('newHost', newHostData);
-        const path = `/hostRoom/${foundHostName}?nickName=${foundNickName}`;
+        connectedSocket.emit('newHost', newHostData);
+        const path = `/hostRoom/${hostName}?nickName=${nickName}`;
         navigate(path);
     };
 
     return (
-        <div className={data.modalStatus ? styles.activeModal : styles.hostContainer}>
+        <div className={modalStatus ? styles.activeModal : styles.hostContainer}>
             <div className={styles.hostSettings}>
                 <div className={styles.blockCloseBtn}>
                     <button
@@ -63,14 +67,14 @@ export const HostSettings = () => {
                         id="filled-basic"
                         label="Your host name"
                         variant="filled"
-                        value={data.hostName}
+                        value={hostName}
                     />
                 </div>
                 <div className={styles.selectNameTime}>
                     <div>
                         <label htmlFor="gameTime">Game time </label>
                         <select
-                            value={data.gameTime}
+                            value={gameTime}
                             onChange={(e) => dispatch(setGameTime(e.target.value))}
                             id="gameTime"
                         >
@@ -83,7 +87,7 @@ export const HostSettings = () => {
                     <div>
                         <label htmlFor="NumberOfPlayers">Number of players </label>
                         <select
-                            value={data.numOfPlayers}
+                            value={numOfPlayers}
                             onChange={(e) => dispatch(setNumberOfPlayers(e.target.value))}
                             id="NumberOfPlayers"
                         >
@@ -96,17 +100,7 @@ export const HostSettings = () => {
 
                 <div className={styles.footBtns}>
                     <div>
-                        <button onClick={butHandler}>Create</button>
-                        {/* <NavLink
-                            to={`/hostRoom/${data.hostName}`}
-                            // ref={enterRef}
-                            id="send"
-                            // type="submit"
-                            onClick={formHandler}
-                            // className={classes.navStyle}
-                        >
-                            Create
-                        </NavLink> */}
+                        <button onClick={createRoom}>Create</button>
                     </div>
 
                     <div>
