@@ -35,27 +35,28 @@ let hosts: IHostData[] = [{ numOfPlayers: '2', gameTime: 'average', hostName: 'T
 io.on('connection', async (socket) => {
     // io.sockets.emit('hostsData', hosts);
     console.log(`The user is connected to the public room --- USER ID --- ${socket.id}} ---`);
+    console.log(socket);
     socket.emit('hostsData', hosts);
 
-    socket.on('joinToRoom', async (mess) => {
+    socket.on('joinToRoom', async (roomName) => {
         // console.log(`User connected to room ${mess} --- USER ID ${socket.id}}`);
 
-        await socket.join(`${mess}`);
-
+        await socket.join(`${roomName}`);
+        console.log(socket.rooms.size);
         // console.log(`Joined to: room ${mess} `);
         // io.to(`${mess}`).emit('connectToRoom', `User has joined to room --- ${mess} --- USER ID --- ${socket.id} ---`);
 
-        socket.to(`${mess}`).emit('connectToRoom', `User has joined to room --- ${mess} --- USER ID --- ${socket.id} ---`);
+        socket.to(`${roomName}`).emit('connectToRoom', `User has joined to room --- ${roomName} --- USER ID --- ${socket.id} ---`);
 
         // io.sockets.to(`room ${mess}`).emit('connectToRoom', `USER LEFT - ${mess}`);
     });
 
-    socket.on('leaveTheRoom', async (mess) => {
-        await socket.leave(`${mess}`);
-        console.log(`Leave from: ${mess} USER ID ${socket.id}`);
+    socket.on('leaveTheRoom', async (roomName) => {
+        await socket.leave(`${roomName}`);
+        console.log(`Leave from: ${roomName} USER ID ${socket.id}`);
         // io.to(`room ${mess}`).emit('connectToRoom', `USER LEFT - ${mess}`);
         // io.sockets.to(`room ${mess}`).emit('connectToRoom', `USER LEFT - ${mess}`);
-        socket.to(`${mess}`).emit('connectToRoom', `User has left from room --- ${mess} --- USER ID --- ${socket.id} ---`);
+        socket.to(`${roomName}`).emit('connectToRoom', `User has left from room --- ${roomName} --- USER ID --- ${socket.id} ---`);
     });
 
     socket.on('newHost', async (newHost) => {

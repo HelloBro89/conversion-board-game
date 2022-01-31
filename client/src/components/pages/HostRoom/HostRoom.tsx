@@ -24,20 +24,23 @@ export const HostRoom = () => {
     useEffect(() => {
         console.log(`USE EFFECT --- HOST ROOM`);
         const locationParams = location.search;
-
-        console.log(locationParams);
-
         const windowLocationHref = window.location.href;
         const neededParams = windowLocationHref.split('/')[4].split('=')[1];
 
-        const fullPathForcomparison = `/hostRoom/${params.hostName}?nickName=${neededParams}`;
-        const comparisonPathSecond = `/hostRoom/${params.hostName}?nickName=${neededParams}/`;
+        // console.log(`Window full  ${windowLocationHref} `);
+        // console.log(`All needed params ${windowLocationHref.split('/')[4].split('=')}`);
+        // console.log(`Window zero ${neededParams}`);
+        // console.log(`Window one ${windowLocationHref.split('/')[4].split('=')[0]} `);
+
+        const comparisonPathFirst = `/hostRoom/${params.hostName}?nickName=${neededParams}`;
+        // const comparisonPathSecond = `/hostRoom/${params.hostName}?nickName=${neededParams}/`;
 
         if (
-            fullPathForcomparison !== `${location.pathname}${locationParams}` &&
-            comparisonPathSecond !== `${location.pathname}${locationParams}`
+            comparisonPathFirst !== `${location.pathname}${locationParams}` &&
+            comparisonPathFirst + '/' !== `${location.pathname}${locationParams}`
         ) {
             navigate('/error');
+            return;
         }
 
         if (Object.keys(connectedSocket).length !== 0) {
@@ -67,7 +70,8 @@ export const HostRoom = () => {
     }, []);
 
     const test = () => {
-        console.log(`Current socket in redux: ${connectedSocket}`);
+        console.log('Current socket in redux: ');
+        console.log(connectedSocket);
         console.log(`Current nickName in redux ${nickName}`);
         console.log(`Current room-name in redux ${roomName}`);
     };
