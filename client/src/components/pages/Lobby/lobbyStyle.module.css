@@ -41,13 +41,24 @@
     text-decoration: none;
 }
 .connectInfo {
-    background-color: gray;
-    display: flex;
+    background-color: rgba(173, 166, 166, 0.692);
+    /* display: flex; */
 }
 
 .connectInfoTwo {
     background-color: white;
+    /* display: flex; */
+}
+
+.activeConnectInfo {
     display: flex;
+    margin-top: 2px;
+}
+
+.activeConnectInfo:hover {
+    box-shadow: 0px 0px 15px 0px rgba(53, 100, 138, 0.53) inset;
+    /* box-shadow: 0px 5px 10px 5px rgba(57, 58, 59, 0.781); */
+    /* box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.774); */
 }
 
 .createHost {

@@ -35,9 +35,11 @@ export const ConnectInfo = () => {
                             key={ind}
                             className={ind % 2 === 0 ? styles.connectInfo : styles.connectInfoTwo}
                         >
-                            <div className={styles.firstCol}>{item.hostName}</div>
-                            <div className={styles.secondCol}>{item.gameTime}</div>
-                            <div className={styles.thirdCol}>{item.numOfPlayers}</div>
+                            <div className={styles.activeConnectInfo}>
+                                <div className={styles.firstCol}>{item.hostName}</div>
+                                <div className={styles.secondCol}>{item.gameTime}</div>
+                                <div className={styles.thirdCol}>{item.numOfPlayers}</div>
+                            </div>
                         </div>
                     ))}
                 </div>

@@ -19,12 +19,9 @@ import { textFieldFilter, eventCode } from '../../../helpers/textFieldFilter';
 export const HostSettings = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    // const data = useSelector((state: RootState) => state.appData);
     const { nickName, hostName, numOfPlayers, gameTime, modalStatus } = useSelector(
         (state: RootState) => state.appData
     );
-    // const foundNickName = useSelector((state: RootState) => state.appData.nickName);
-    // const foundHostName = useSelector((state: RootState) => state.appData.hostName);
     const { connectedSocket } = useSelector((state: RootState) => state.socketsData);
 
     const handlerTextField = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -55,11 +52,6 @@ export const HostSettings = () => {
                         <img className={styles.closeIcon} src={closedIcon}></img>
                     </button>
                 </div>
-                {/* <form
-                    // onSubmit={() => formHandler()}
-                    action=""
-                    id="form1"
-                > */}
                 <div className={styles.inputHostName}>
                     <TextField
                         onKeyDown={(e) => eventCode(e)}
@@ -113,7 +105,6 @@ export const HostSettings = () => {
                         </button>
                     </div>
                 </div>
-                {/* </form> */}
             </div>
         </div>
     );

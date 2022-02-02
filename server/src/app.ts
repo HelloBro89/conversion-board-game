@@ -31,7 +31,7 @@ interface IHostData {
     hostID: string;
 }
 // const countOfUsers: string[] = [];
-let hosts: IHostData[] = [{ numOfPlayers: '2', gameTime: 'average', hostName: 'TEST', hostID: 'sajn3n234j2n' }];
+let hosts: IHostData[] = [{ numOfPlayers: '2', gameTime: 'average', hostName: 'FIRST', hostID: 'sajn3n234j2n' }];
 
 io.on('connection', async (socket) => {
     // console.log(hosts);
