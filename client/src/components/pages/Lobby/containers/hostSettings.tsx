@@ -12,6 +12,7 @@ import {
     setModalStatus,
     setGameTime,
     setHostName,
+    setCheckHost,
     // setNickName,
 } from '../../../redux/actions/appDataAction';
 import { textFieldFilter, eventCode } from '../../../helpers/textFieldFilter';
@@ -30,14 +31,17 @@ export const HostSettings = () => {
     };
 
     const createRoom = () => {
+        dispatch(setCheckHost(true));
         const newHostData = {
             numOfPlayers: numOfPlayers,
             gameTime: gameTime,
             hostName: hostName,
             hostID: connectedSocket.id,
+            players: [nickName],
         };
         connectedSocket.emit('newHost', newHostData);
-        const path = `/hostRoom/${hostName}?nickName=${nickName}`;
+
+        const path = `/hostRoom/${hostName}?nickName=${nickName}&checkHost=true`;
         navigate(path);
     };
 

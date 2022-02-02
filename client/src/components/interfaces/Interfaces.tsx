@@ -13,6 +13,8 @@ export interface IHostData {
     numOfPlayers: string;
     gameTime: string;
     hostName: string;
+    hostID: string;
+    // players: string[];
 }
 
 // for SETTING FUNCTION

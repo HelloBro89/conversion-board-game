@@ -20,6 +20,9 @@ export const setMainEvents = (
     });
     socket.on('hostsData', (data: IHostData[]) => {
         console.log(`All hosts --- ${JSON.stringify(data)}`);
+        console.log('***************************');
+        console.log(data);
+
         dispatch(setHostData(data));
     });
 };

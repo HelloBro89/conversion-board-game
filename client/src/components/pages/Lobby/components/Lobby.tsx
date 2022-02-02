@@ -33,7 +33,6 @@ export const Lobby = () => {
             if (hostName !== '') {
                 console.log(`User left ${connectedSocket.id}`);
                 // connectedSocket.disconnect();
-                console.log('************************************');
                 connectedSocket.emit('leaveTheRoom', hostName);
                 dispatch(setHostName(''));
                 // dispatch(setRoomName(''));

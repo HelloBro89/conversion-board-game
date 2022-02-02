@@ -16,7 +16,7 @@ export function setSocketConnection(value: any) {
         payload: value,
     };
 }
-export function setPlayerNames(value: any) {
+export function setPlayerNames(value: string[]) {
     return {
         type: SET_PLAYER_NAMES,
         payload: value,

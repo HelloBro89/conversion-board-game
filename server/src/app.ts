@@ -29,33 +29,73 @@ interface IHostData {
     gameTime: string;
     hostName: string;
     hostID: string;
+    players: string[];
 }
 // const countOfUsers: string[] = [];
-let hosts: IHostData[] = [{ numOfPlayers: '2', gameTime: 'average', hostName: 'FIRST', hostID: 'sajn3n234j2n' }];
+let hosts: IHostData[] = [{ numOfPlayers: '2', gameTime: 'average', hostName: 'FIRST', hostID: 'sajn3n234j2n', players: ['Pasha'] }];
 
 io.on('connection', async (socket) => {
     // console.log(hosts);
     console.log(`The user is connected to the public room --- User ID --- ${socket.id} ---`);
     socket.emit('hostsData', hosts);
 
-    socket.on('joinToRoom', async (roomName) => {
+    socket.on('joinToRoom', async (data) => {
         // console.log(`User connected to room ${mess} --- USER ID ${socket.id}}`);
+        // hosts.map((item) => {
+        //     if (item.hostName === data.roomName) {
+        //         item.players.push(data.nickName);
+        //     }
+        // });
+        try {
+            const foundIndex = hosts.findIndex((item) => item.hostName === data.roomName);
+            const neededHostObj = hosts[foundIndex]!;
+            neededHostObj.players.push(data.nickName);
+            const neededHostPlayers = neededHostObj.players;
 
-        await socket.join(`${roomName}`);
-        console.log(`Join to room ${socket.rooms.size}`);
-        // console.log(`Socket rooms:`);
+            await socket.join(`${data.roomName}`);
+            console.log(`Join to room ${data.roomName}`);
+            console.log(`Current nickName in redux server side ${data.nickName}`);
 
-        // console.log(socket.rooms.size);
-        // console.log(`Socket ID ${socket.id}`);
+            // socket.to(`${data.roomName}`).emit('connectToRoom', {
+            //     message: `User has joined to room - ${data.roomName} --- User ID - ${socket.id} --- User name - ${data.nickName}`,
+            //     playerNames: neededHostPlayers,
+            // });
 
-        // console.log(`Joined to: room ${mess} `);
-        // io.to(`${mess}`).emit('connectToRoom', `User has joined to room --- ${mess} --- USER ID --- ${socket.id} ---`);
+            io.to(`${data.roomName}`).emit('connectToRoom', {
+                message: `User has joined to room - ${data.roomName} --- User ID - ${socket.id} --- User name - ${data.nickName}`,
+                playerNames: neededHostPlayers,
+            });
+        } catch (err) {
+            console.log('*************JOIN ROOM');
+            console.log(err);
+        }
+        // socket.to(`${data.roomName}`).emit('connectToRoom', {
+        //     message: `User has joined to room - ${data.roomName} --- User ID - ${socket.id} --- User name - ${data.nickName}`,
+        //     playerNames: neededHostPlayers,
+        // });
 
-        socket
-            .to(`${roomName}`)
-            .emit('connectToRoom', { message: `User has joined to room --- ${roomName} --- USER ID --- ${socket.id} ---` });
+        // socket.to(`${data.roomName}`).emit('connectToRoom', {
+        //     message: `User has joined to room - ${data.roomName} --- User ID - ${socket.id} --- User name - ${data.nickName}`,
+        //     playerName: data.nickName,
+        // });
 
         // io.sockets.to(`room ${mess}`).emit('connectToRoom', `USER LEFT - ${mess}`);
+    });
+
+    socket.on('newHost', async (newHost: IHostData) => {
+        try {
+            console.log(`CREATE A ROOM `);
+            // console.log(hosts);
+            // console.log(`New host ${JSON.stringify(newHost)}`);
+            hosts.push(newHost);
+            console.log(hosts);
+            io.sockets.emit('addNewHost', newHost);
+            console.log(`Joined to: room ${newHost.hostName} --- USER ID ${socket.id} `);
+            socket.join(`${newHost.hostName}`);
+        } catch (e) {
+            console.log('*************NEW HOST');
+            console.log(e);
+        }
     });
 
     socket.on('leaveTheRoom', async (roomName) => {
@@ -63,14 +103,14 @@ io.on('connection', async (socket) => {
         await socket.leave(`${roomName}`);
         if (hostIndex > -1) {
             const courrentRoom = hosts[hostIndex];
-            socket.to(`${courrentRoom!.hostName}`).emit('connectToRoom', {
+            socket.to(`${courrentRoom!.hostName}`).emit('leavingTheRoom', {
                 message: `User has left from room --- ${courrentRoom!.hostName} --- USER ID --- ${socket.id} ---`,
                 masterHost: false,
             });
 
             hosts.splice(hostIndex, 1);
         } else {
-            socket.to(`${roomName}`).emit('connectToRoom', {
+            socket.to(`${roomName}`).emit('leavingTheRoom', {
                 message: `User has left from room --- ${roomName} --- USER ID --- ${socket.id} ---`,
                 masterHost: true,
             });
@@ -78,19 +118,6 @@ io.on('connection', async (socket) => {
         console.log(`Leave from: ${roomName} USER ID ${socket.id}`);
         // io.to(`room ${mess}`).emit('connectToRoom', `USER LEFT - ${mess}`);
         // io.sockets.to(`room ${mess}`).emit('connectToRoom', `USER LEFT - ${mess}`);
-    });
-
-    socket.on('newHost', async (newHost) => {
-        console.log(`CREATE A ROOM `);
-        // console.log(hosts);
-
-        // console.log(`New host ${JSON.stringify(newHost)}`);
-        hosts.push(newHost);
-        // console.log(hosts);
-        io.sockets.emit('addNewHost', newHost);
-        console.log(`Joined to: room ${newHost.hostName} --- USER ID ${socket.id} `);
-        socket.join(`${newHost.hostName}`);
-        // socket.join(`${newHost.masterHost}`);
     });
 
     // socket.on('disconnecting', () => {
@@ -106,14 +133,14 @@ io.on('connection', async (socket) => {
             await socket.leave(socketRoom);
             if (hostIndex > -1) {
                 const courrentRoom = hosts[hostIndex];
-                socket.to(`${courrentRoom!.hostName}`).emit('connectToRoom', {
+                socket.to(`${courrentRoom!.hostName}`).emit('leavingTheRoom', {
                     message: `User has left from room --- ${courrentRoom!.hostName} --- USER ID --- ${socket.id} ---`,
                     masterHost: false,
                 });
 
                 hosts.splice(hostIndex, 1);
             } else {
-                socket.to(`${socketRoom}`).emit('connectToRoom', {
+                socket.to(`${socketRoom}`).emit('leavingTheRoom', {
                     message: `User has left from room --- ${socketRoom} --- USER ID --- ${socket.id} ---`,
                     masterHost: true,
                 });
@@ -124,25 +151,6 @@ io.on('connection', async (socket) => {
     socket.on('disconnect', async () => {
         console.log(`DISCONNECT`);
         console.log(`A user disconnected ${socket.id}`);
-
-        // const hostIndex = hosts.findIndex((item) => item.hostID === socket.id);
-        // console.log(hostIndex);
-
-        // if (hostIndex > -1) {
-        //     const courrentRoom = hosts[hostIndex];
-        //     await socket.leave(`${courrentRoom!.hostID}`);
-        //     socket
-        //         .to(`${courrentRoom!.hostName}`)
-        //         .emit('connectToRoom', `User has left from room --- ${courrentRoom!.hostName} --- USER ID --- ${socket.id} ---`);
-
-        //     hosts.splice(hostIndex, 1);
-        // }
-
-        // console.log(`Abandoned user id --- ${socket.id}`);
-        // console.log(`Hosts length ${hosts.length}`);
-        // console.log(`All hosts ${JSON.stringify(hosts)}`);
-
-        // io.sockets.emit('user disconnedted');
     });
 });
 

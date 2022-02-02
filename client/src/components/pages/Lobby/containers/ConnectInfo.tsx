@@ -14,13 +14,14 @@ export const ConnectInfo = () => {
     const navigate = useNavigate();
 
     const hostSelection = (e: MouseEvent) => {
-        const hostName = e.currentTarget.firstElementChild?.textContent;
+        const hostName = e.currentTarget.childNodes[0].firstChild?.textContent;
+        // const hostName = e.currentTarget.firstElementChild?.textContent;
         // console.log(`Joined to room --- ${hostName}`);
         dispatch(setHostName(hostName!));
         // socketClient.emit('joinToRoom', hostName);
         console.log(`CONNECTION PATH TO ROOM: ${`/hostRoom/${hostName}nickName=${nickName}`}`);
 
-        const path = `/hostRoom/${hostName}?nickName=${nickName}`;
+        const path = `/hostRoom/${hostName}?nickName=${nickName}&checkHost=false`;
 
         navigate(path);
     };

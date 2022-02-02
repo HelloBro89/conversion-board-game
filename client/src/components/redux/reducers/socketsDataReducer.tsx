@@ -9,18 +9,21 @@ import { IInitialState } from '../../interfaces/Interfaces';
 const initialState: IInitialState = {
     hostsData: [],
     connectedSocket: {},
-    playerNames: ['Pasha', 'Veronika', 'Lucky'],
+    // playerNames: ['Pasha', 'Veronika', 'Lucky'],
+    playerNames: [],
 };
 
 function socketsDataReducer(state = initialState, action: { type: string; payload: any }) {
     switch (action.type) {
         case SET_SOCKET_HOST_DATA:
             return { ...state, hostsData: action.payload };
+
         case SET_NEW_HOST:
             return { ...state, hostsData: [...state.hostsData, action.payload] };
 
         case SET_SOCKET_CONNECTION:
             return { ...state, connectedSocket: action.payload };
+
         case SET_PLAYER_NAMES:
             return { ...state, playerNames: action.payload };
 
