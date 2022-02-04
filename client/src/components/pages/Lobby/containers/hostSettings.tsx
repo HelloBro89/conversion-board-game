@@ -39,6 +39,10 @@ export const HostSettings = () => {
             hostID: connectedSocket.id,
             players: [nickName],
         };
+        // const jsonRoomSettings = JSON.stringify(newHostData);
+
+        localStorage.setItem('roomData', JSON.stringify(newHostData));
+
         connectedSocket.emit('newHost', newHostData);
 
         const path = `/hostRoom/${hostName}?nickName=${nickName}&checkHost=true`;

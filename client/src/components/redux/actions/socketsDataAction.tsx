@@ -3,6 +3,7 @@ export const SET_SOCKET_HOST_DATA = 'SET_SOCKET_HOST_DATA';
 export const SET_SOCKET_CONNECTION = 'SET_SOCKET_CONNECTION';
 export const SET_PLAYER_NAMES = 'SET_PLAYER_NAMES';
 export const SET_NEW_HOST = 'SET_NEW_HOST';
+export const RESET_SOCKET_DATA = 'RESET_SOCKET_DATA';
 
 export function setHostData(value: IHostData[]) {
     return {
@@ -26,5 +27,10 @@ export function setNewHost(value: IHostData) {
     return {
         type: SET_NEW_HOST,
         payload: value,
+    };
+}
+export function resetSocketData() {
+    return {
+        type: RESET_SOCKET_DATA,
     };
 }

@@ -19,7 +19,6 @@ export const ConnectInfo = () => {
         // console.log(`Joined to room --- ${hostName}`);
         dispatch(setHostName(hostName!));
         // socketClient.emit('joinToRoom', hostName);
-        console.log(`CONNECTION PATH TO ROOM: ${`/hostRoom/${hostName}nickName=${nickName}`}`);
 
         const path = `/hostRoom/${hostName}?nickName=${nickName}&checkHost=false`;
 

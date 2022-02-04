@@ -25,29 +25,42 @@ export const HostRoom = () => {
         const fullPath = window.location.href;
 
         const neededParamsNickName = fullPath.split('?')[1].split('&');
-        const nickNameParam = neededParamsNickName[0];
-        const checkHostParam = neededParamsNickName[1].split('/')[0];
+        const nickNameParam = neededParamsNickName[0].split('=')[1];
+        const checkHostParam = neededParamsNickName[1].split('/')[0].split('=')[1];
 
-        const comparisonPath = `/hostRoom/${params.hostName}?${nickNameParam}&${checkHostParam}`;
+        // const comparisonPath = `/hostRoom/${params.hostName}?${nickNameParam}&${checkHostParam}`;
+        const comparisonPath = `/hostRoom/${params.hostName}?nickName=${nickNameParam}&checkHost=${checkHostParam}`;
 
         if (
-            comparisonPath !== `${location.pathname}${locationParams}` &&
-            comparisonPath + '/' !== `${location.pathname}${locationParams}`
+            (comparisonPath !== `${location.pathname}${locationParams}` &&
+                comparisonPath + '/' !== `${location.pathname}${locationParams}`) ||
+            nickNameParam === '' ||
+            (checkHostParam !== 'true' && checkHostParam !== 'false')
         ) {
             navigate('/error');
             return;
         }
-
+        const checkHostFromUrlParams = searchParams.get('checkHost');
         if (Object.keys(connectedSocket).length !== 0) {
-            // dispatch(setPlayerNames(nickName));
-            // console.log('******** SIZE');
-            // console.log(connectedSocket);
-            connectedSocket.emit('joinToRoom', { roomName: params.hostName, nickName });
-            // console.log(`Current nickName in redux ${nickName}`);
+            if (checkHostFromUrlParams === 'false') {
+                connectedSocket.emit('joinToRoom', { roomName: params.hostName, nickName });
+                // connectedSocket.on(
+                //     'connectToRoom',
+                //     (data: { message: string; playerNames: string[] }) => {
+                //         dispatch(setPlayerNames(data.playerNames));
+                //         console.log(`Listen connect to ROOM`);
+                //         // console.log(data);
+                //         // console.log(data.message);
+                //     }
+                // );
+                console.log(` STATUS --- ${checkHostFromUrlParams}`);
+            }
+
             connectedSocket.on(
                 'connectToRoom',
                 (data: { message: string; playerNames: string[] }) => {
                     dispatch(setPlayerNames(data.playerNames));
+                    console.log(`Listen connect to ROOM`);
                     // console.log(data);
                     // console.log(data.message);
                 }
@@ -68,10 +81,17 @@ export const HostRoom = () => {
         }
 
         const nickNameFromParams = searchParams.get('nickName');
+
         dispatch(setNickName(nickNameFromParams!));
         dispatch(setHostName(params.hostName!));
 
-        const socket = socketIOClient();
+        const socket = socketIOClient('http://localhost:4000');
+
+        if (checkHostFromUrlParams === 'true') {
+            // socket.emit('newHost', newHostData); // HERE WILL BE A localstorage data
+            console.log(`STATUS --- ${checkHostFromUrlParams}`);
+        }
+
         setMainEvents(socket, (setAction) => dispatch(setAction));
         socket.emit('joinToRoom', { roomName: params.hostName, nickName });
         socket.on('connectToRoom', (data: { message: string; playerNames: string[] }) => {
@@ -81,7 +101,7 @@ export const HostRoom = () => {
         });
 
         socket.on(`leavingTheRoom`, (data) => {
-            // console.log('TEST leavingTheRoom ' + data);
+            console.log('TEST leavingTheRoom ' + data);
         });
 
         // window.onbeforeunload = () => {
@@ -90,21 +110,20 @@ export const HostRoom = () => {
     }, []);
 
     const test = () => {
+        const data = localStorage.getItem('roomData');
+        console.log(data);
+
         // console.log(`Socket ID ${connectedSocket.id}`);
         // console.log('Current socket in redux: ');
         // console.log(connectedSocket);
-
         // console.log(`Socket rooms:`);
         // console.log(connectedSocket.rooms);
-
         // console.log(`Current nickName in redux ${nickName}`);
-        console.log('Player names:');
-        console.log(playerNames);
-
-        console.log('Check HostData:');
-        console.log(hostsData);
+        // console.log('Player names:');
+        // console.log(playerNames);
+        // console.log('Check HostData:');
+        // console.log(hostsData);
         // console.log(hostsData[0].players[0]);
-
         // console.log(`Current room-name in redux ${roomName}`);
     };
 

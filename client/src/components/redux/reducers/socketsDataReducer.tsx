@@ -3,6 +3,7 @@ import {
     SET_SOCKET_CONNECTION,
     SET_PLAYER_NAMES,
     SET_NEW_HOST,
+    RESET_SOCKET_DATA,
 } from '../actions/socketsDataAction';
 import { IInitialState } from '../../interfaces/Interfaces';
 
@@ -26,6 +27,9 @@ function socketsDataReducer(state = initialState, action: { type: string; payloa
 
         case SET_PLAYER_NAMES:
             return { ...state, playerNames: action.payload };
+
+        case RESET_SOCKET_DATA:
+            return initialState;
 
         default:
             return state;

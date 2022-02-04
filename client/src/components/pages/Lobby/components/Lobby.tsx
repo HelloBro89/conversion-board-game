@@ -29,7 +29,7 @@ export const Lobby = () => {
         }
         if (Object.keys(connectedSocket).length !== 0) {
             console.log(`foundRoomName -${hostName}`);
-
+            connectedSocket.removeAllListeners('connectToRoom');
             if (hostName !== '') {
                 console.log(`User left ${connectedSocket.id}`);
                 // connectedSocket.disconnect();
@@ -40,7 +40,7 @@ export const Lobby = () => {
             return;
         }
 
-        const socket = socketIOClient();
+        const socket = socketIOClient('http://localhost:4000');
         setMainEvents(socket, (setAction) => dispatch(setAction));
 
         // window.onbeforeunload = () => {
