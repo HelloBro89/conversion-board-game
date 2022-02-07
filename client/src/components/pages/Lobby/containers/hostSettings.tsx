@@ -1,7 +1,7 @@
 // import React, { useRef } from 'react';
 import { ChangeEvent, FormEvent, MouseEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { TextField } from '@material-ui/core';
 import styles from '../lobbyStyle.module.css';
 // import { useStyles } from '../stylesLobby';
@@ -37,7 +37,7 @@ export const HostSettings = () => {
             gameTime: gameTime,
             hostName: hostName,
             hostID: connectedSocket.id,
-            players: [nickName],
+            players: [],
         };
         // const jsonRoomSettings = JSON.stringify(newHostData);
 

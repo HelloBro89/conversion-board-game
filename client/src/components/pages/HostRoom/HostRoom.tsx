@@ -4,9 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { useParams, useSearchParams, useLocation } from 'react-router-dom';
 import socketIOClient from 'socket.io-client';
 import { RootState } from '../../redux';
-import { setHostName, setNickName } from '../../redux/actions/appDataAction';
+import { setCheckHost, setHostName, setNickName } from '../../redux/actions/appDataAction';
 import { setMainEvents } from '../../helpers/setMainEvents';
 import { setPlayerNames } from '../../redux/actions/socketsDataAction';
+import { IHostData } from '../../interfaces/Interfaces';
 
 export const HostRoom = () => {
     const params = useParams();
@@ -18,6 +19,9 @@ export const HostRoom = () => {
         (state: RootState) => state.socketsData
     );
     const { nickName } = useSelector((state: RootState) => state.appData);
+
+    const dataOne = useSelector((state: RootState) => state.socketsData);
+    const dataTwo = useSelector((state: RootState) => state.appData);
 
     useEffect(() => {
         console.log(`USE EFFECT --- HOST ROOM`);
@@ -42,23 +46,15 @@ export const HostRoom = () => {
         }
         const checkHostFromUrlParams = searchParams.get('checkHost');
         if (Object.keys(connectedSocket).length !== 0) {
-            if (checkHostFromUrlParams === 'false') {
-                connectedSocket.emit('joinToRoom', { roomName: params.hostName, nickName });
-                // connectedSocket.on(
-                //     'connectToRoom',
-                //     (data: { message: string; playerNames: string[] }) => {
-                //         dispatch(setPlayerNames(data.playerNames));
-                //         console.log(`Listen connect to ROOM`);
-                //         // console.log(data);
-                //         // console.log(data.message);
-                //     }
-                // );
-                console.log(` STATUS --- ${checkHostFromUrlParams}`);
-            }
-
+            // if (checkHostFromUrlParams === 'false') {
+            // }
+            connectedSocket.emit('joinToRoom', { roomName: params.hostName, nickName });
+            console.log(` STATUS --- ${checkHostFromUrlParams}`);
             connectedSocket.on(
                 'connectToRoom',
                 (data: { message: string; playerNames: string[] }) => {
+                    console.log(`Array of players names:`);
+                    console.log(data.playerNames);
                     dispatch(setPlayerNames(data.playerNames));
                     console.log(`Listen connect to ROOM`);
                     // console.log(data);
@@ -67,12 +63,17 @@ export const HostRoom = () => {
             );
             connectedSocket.on(
                 `leavingTheRoom`,
-                (data: { message: string; masterHost?: boolean }) => {
-                    if (data.masterHost === false) {
+                (data: { message: string; masterHost?: boolean; players?: string[] }) => {
+                    if (data.masterHost === true) {
                         alert('Host has left this room !');
-                    } else if (data.masterHost === true) {
-                        alert('Prosto user pokinyl komnatu');
+                        console.log(`Host has left this room !`);
+                        navigate('/error');
+                    } else if (data.masterHost === false) {
+                        alert('Player has left the room !');
+                        dispatch(setPlayerNames(data.players!));
+                        console.log(data.players);
                     } else {
+                        alert('Something else!!!!!!!!!');
                         console.log(data.message);
                     }
                 }
@@ -85,53 +86,80 @@ export const HostRoom = () => {
         dispatch(setNickName(nickNameFromParams!));
         dispatch(setHostName(params.hostName!));
 
-        const socket = socketIOClient('http://localhost:4000');
+        const socket = socketIOClient('http://localhost:4000', { query: { nickName: nickName } });
+        setMainEvents(socket, (setAction) => dispatch(setAction));
 
         if (checkHostFromUrlParams === 'true') {
-            // socket.emit('newHost', newHostData); // HERE WILL BE A localstorage data
-            console.log(`STATUS --- ${checkHostFromUrlParams}`);
-        }
+            const roomDataLocalStorage = localStorage.getItem('roomData');
 
-        setMainEvents(socket, (setAction) => dispatch(setAction));
-        socket.emit('joinToRoom', { roomName: params.hostName, nickName });
+            if (roomDataLocalStorage) {
+                const parseJSON: IHostData = JSON.parse(roomDataLocalStorage);
+                if (params.hostName !== parseJSON.hostName) {
+                    navigate('/error');
+                }
+
+                dispatch(setHostName(parseJSON.hostName));
+                // socket.emit('leaveTheRoom', parseJSON.hostName);
+                console.log(`************** Socket ID **************`);
+
+                const refreshedHost = {
+                    numOfPlayers: parseJSON.hostName,
+                    gameTime: parseJSON.gameTime,
+                    hostName: parseJSON.hostName,
+                    // hostID: socket.id,
+                    players: [],
+                };
+                console.log(`!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! `);
+                socket.emit('newHost', refreshedHost); // HERE WILL BE A localstorage data
+                // console.log(`!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ${refreshedHost}`);
+                // socket.emit('newHost', refreshedHost); // HERE WILL BE A localstorage data
+            }
+            dispatch(setCheckHost(true));
+
+            // console.log(`STATUS --- ${checkHostFromUrlParams}`);
+        }
+        // else {
+        socket.emit('joinToRoom', { roomName: params.hostName, nickName: nickNameFromParams });
+        // console.log('somthing');
+        // }
+
+        // setMainEvents(socket, (setAction) => dispatch(setAction));
+        // socket.emit('joinToRoom', { roomName: params.hostName, nickName });
         socket.on('connectToRoom', (data: { message: string; playerNames: string[] }) => {
+            console.log(`Array of players names:`);
+            console.log(data.playerNames);
+
             dispatch(setPlayerNames(data.playerNames));
             // console.log(data);
             // console.log(data.message);
         });
 
-        socket.on(`leavingTheRoom`, (data) => {
-            console.log('TEST leavingTheRoom ' + data);
-        });
+        socket.on(
+            `leavingTheRoom`,
+            (data: { message: string; masterHost?: boolean; players?: string[] }) => {
+                if (data.masterHost === true) {
+                    alert('Host has left this room !');
+                    console.log(`Host has left this room !`);
+                    navigate('/error');
+                } else if (data.masterHost === false) {
+                    dispatch(setPlayerNames(data.players!));
+                    console.log(data.players);
+                    alert('Player has left the room !');
+                } else {
+                    alert('Something else!!!!!!!!!');
+                    console.log(data.message);
+                }
+            }
+        );
 
         // window.onbeforeunload = () => {
         //     return true;
         // };
     }, []);
 
-    const test = () => {
-        const data = localStorage.getItem('roomData');
-        console.log(data);
-
-        // console.log(`Socket ID ${connectedSocket.id}`);
-        // console.log('Current socket in redux: ');
-        // console.log(connectedSocket);
-        // console.log(`Socket rooms:`);
-        // console.log(connectedSocket.rooms);
-        // console.log(`Current nickName in redux ${nickName}`);
-        // console.log('Player names:');
-        // console.log(playerNames);
-        // console.log('Check HostData:');
-        // console.log(hostsData);
-        // console.log(hostsData[0].players[0]);
-        // console.log(`Current room-name in redux ${roomName}`);
-    };
-
     return (
         <div>
-            <button style={{ marginTop: '100px' }} onClick={test}>
-                view data
-            </button>
+            {console.log(playerNames)}
             {playerNames.length ? (
                 <div style={{ marginTop: '200px' }}>
                     {playerNames.map((item: string, ind: number) => (

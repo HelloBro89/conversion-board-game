@@ -28,30 +28,38 @@ interface IHostData {
     numOfPlayers: string;
     gameTime: string;
     hostName: string;
-    hostID: string;
+    hostID?: string;
     players: string[];
 }
-// const countOfUsers: string[] = [];
-let hosts: IHostData[] = [{ numOfPlayers: '2', gameTime: 'average', hostName: 'FIRST', hostID: 'sajn3n234j2n', players: ['Pasha'] }];
+
+let hosts: IHostData[] = [
+    /* { numOfPlayers: '2', gameTime: 'average', hostName: 'FIRST', hostID: 'sajn3n234j2n', players: [] } */
+];
 
 io.on('connection', async (socket) => {
     // console.log(hosts);
-    // console.log(`The user is connected to the public room --- User ID --- ${socket.id} ---`);
+    console.log(`The user is connected to the public room --- User ID --- ${socket.id} ---`);
+
+    // const socketQuery = Object.assign({}, socket.handshake.query);
+    // console.log(socketQuery);
+
     socket.emit('hostsData', hosts);
 
     socket.on('joinToRoom', async (data) => {
         // console.log(`User connected to room ${mess} --- USER ID ${socket.id}}`);
-        // hosts.map((item) => {
-        //     if (item.hostName === data.roomName) {
-        //         item.players.push(data.nickName);
-        //     }
-        // });
+
         try {
-            console.log(`Join to room EVENT`);
-            console.log(data);
+            console.log(`*********** Join to room EVENT ***********`);
+            // console.log(data);
+            // console.log(`HOSTS: `);
+            // console.log(hosts);
+
             const foundIndex = hosts.findIndex((item) => item.hostName === data.roomName);
             const neededHostObj = hosts[foundIndex]!;
             neededHostObj.players.push(data.nickName);
+            // console.log(`JOIN JOIN JOIN `);
+            // console.log(hosts);
+
             const neededHostPlayers = neededHostObj.players;
 
             await socket.join(`${data.roomName}`);
@@ -62,6 +70,8 @@ io.on('connection', async (socket) => {
             //     message: `User has joined to room - ${data.roomName} --- User ID - ${socket.id} --- User name - ${data.nickName}`,
             //     playerNames: neededHostPlayers,
             // });
+            // console.log(`!!!!!!!!!!!`);
+            // console.log(neededHostPlayers);
 
             io.to(`${data.roomName}`).emit('connectToRoom', {
                 message: `User has joined to room - ${data.roomName} --- User ID - ${socket.id} --- User name - ${data.nickName}`,
@@ -71,30 +81,17 @@ io.on('connection', async (socket) => {
             console.log('*************JOIN ROOM');
             console.log(err);
         }
-        // socket.to(`${data.roomName}`).emit('connectToRoom', {
-        //     message: `User has joined to room - ${data.roomName} --- User ID - ${socket.id} --- User name - ${data.nickName}`,
-        //     playerNames: neededHostPlayers,
-        // });
-
-        // socket.to(`${data.roomName}`).emit('connectToRoom', {
-        //     message: `User has joined to room - ${data.roomName} --- User ID - ${socket.id} --- User name - ${data.nickName}`,
-        //     playerName: data.nickName,
-        // });
-
-        // io.sockets.to(`room ${mess}`).emit('connectToRoom', `USER LEFT - ${mess}`);
     });
 
     socket.on('newHost', async (newHost: IHostData) => {
         try {
-            console.log(`New host event `);
-            // console.log(hosts);
-            // console.log(`New host ${JSON.stringify(newHost)}`);
+            console.log(`***********New host event **************`);
+            if (!newHost.hostID) newHost = { ...newHost, hostID: socket.id };
             hosts.push(newHost);
-            // console.log(`Add new host `);
-            // console.log(newHost);
+            // console.log(hosts);
+
             io.sockets.emit('addNewHost', newHost);
-            // console.log(`Joined to: room ${newHost.hostName} --- USER ID ${socket.id} `);
-            socket.join(`${newHost.hostName}`);
+            // socket.join(`${newHost.hostName}`);
         } catch (e) {
             console.log('*************NEW HOST');
             console.log(e);
@@ -102,21 +99,35 @@ io.on('connection', async (socket) => {
     });
 
     socket.on('leaveTheRoom', async (roomName) => {
-        console.log(`Leavethe room EVENT`);
+        console.log(`*********** Leave the room EVENT ***********`);
+        // console.log(`Current host -- ${JSON.stringify(hosts[0])}`);
+        // console.log(`Room Name -- ${roomName}`);
+        // console.log(`Socket ID -- ${socket.id}`);
+
         const hostIndex = hosts.findIndex((item) => item.hostID === socket.id);
         await socket.leave(`${roomName}`);
         if (hostIndex > -1) {
             const courrentRoom = hosts[hostIndex];
+            console.log(`!!!!!!!!!!!!!!! ---- !!!!!!!!!!!!!!!`);
+            io.sockets.emit('deleteHost', roomName);
             socket.to(`${courrentRoom!.hostName}`).emit('leavingTheRoom', {
                 message: `User has left from room --- ${courrentRoom!.hostName} --- USER ID --- ${socket.id} ---`,
-                masterHost: false,
+                masterHost: true,
             });
-
             hosts.splice(hostIndex, 1);
         } else {
+            console.log(' !!!!!!!! LEAVE ROOM');
+            const { nickName } = Object.assign({}, socket.handshake.query);
+            console.log(`Nick NAME --- ${nickName}`);
+
+            const roomIndex = hosts.findIndex((item) => item.hostName === roomName);
+            const playerIndex = hosts[roomIndex]!.players.findIndex((item) => item === nickName);
+            hosts[roomIndex]!.players.splice(playerIndex, 1);
+
             socket.to(`${roomName}`).emit('leavingTheRoom', {
                 message: `User has left from room --- ${roomName} --- USER ID --- ${socket.id} ---`,
-                masterHost: true,
+                masterHost: false,
+                players: hosts[roomIndex]!.players,
             });
         }
         console.log(`Leave from: ${roomName} USER ID ${socket.id}`);
@@ -124,30 +135,45 @@ io.on('connection', async (socket) => {
         // io.sockets.to(`room ${mess}`).emit('connectToRoom', `USER LEFT - ${mess}`);
     });
 
-    // socket.on('disconnecting', () => {
-    //     console.log(`************disconnecting ${JSON.stringify(socket.rooms)}`); // the Set contains at least the socket ID
-    // });
     socket.on('disconnecting', async () => {
         try {
-            console.log('Disconnecting EVENT');
+            console.log('**************** Disconnecting EVENT *************');
+
+            // console.log(socketQuery['nickName']);
             // console.log(`socket size ${socket.rooms.size}`);
             // console.log(`Socket's room:`);
             const socketRoom = [...socket.rooms.values()][1];
-            const hostIndex = hosts.findIndex((item) => item.hostID === socket.id);
+            // console.log([...socket.rooms.values()]);
+            // const hostIndex = hosts.findIndex((item) => item.hostID === socket.id);
             if (socketRoom) {
                 await socket.leave(socketRoom);
+                const hostIndex = hosts.findIndex((item) => item.hostID === socket.id);
                 if (hostIndex > -1) {
                     const courrentRoom = hosts[hostIndex];
+                    // console.log(`!!!!!!!!!!!!!!! HOST HAS LEFT !!!!!!!!!!!!!!!`);
+                    io.sockets.emit('deleteHost', socketRoom);
                     socket.to(`${courrentRoom!.hostName}`).emit('leavingTheRoom', {
                         message: `User has left from room --- ${courrentRoom!.hostName} --- USER ID --- ${socket.id} ---`,
-                        masterHost: false,
+                        masterHost: true,
                     });
-
                     hosts.splice(hostIndex, 1);
+                    console.log(hosts);
                 } else {
+                    const { nickName } = Object.assign({}, socket.handshake.query);
+                    console.log(`Nick NAME --- ${nickName}`);
+
+                    const roomIndex = hosts.findIndex((item) => item.hostName === socketRoom);
+                    const playerIndex = hosts[roomIndex]!.players.findIndex((item) => item === nickName);
+                    hosts[roomIndex]!.players.splice(playerIndex, 1);
+                    // console.log(`-------------------------------`);
+                    // console.log(hosts);
+
+                    // console.log(`-------------------------------`);
+
                     socket.to(`${socketRoom}`).emit('leavingTheRoom', {
                         message: `User has left from room --- ${socketRoom} --- USER ID --- ${socket.id} ---`,
-                        masterHost: true,
+                        masterHost: false,
+                        players: hosts[roomIndex]!.players,
                     });
                 }
             }
@@ -158,7 +184,7 @@ io.on('connection', async (socket) => {
     });
 
     socket.on('disconnect', async () => {
-        console.log(`Disconnect EVENT`);
+        console.log(`**************** Disconnect EVENT ************`);
         console.log(`A user disconnect ${socket.id}`);
     });
 });

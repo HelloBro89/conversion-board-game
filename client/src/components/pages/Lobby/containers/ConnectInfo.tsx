@@ -15,10 +15,8 @@ export const ConnectInfo = () => {
 
     const hostSelection = (e: MouseEvent) => {
         const hostName = e.currentTarget.childNodes[0].firstChild?.textContent;
-        // const hostName = e.currentTarget.firstElementChild?.textContent;
         // console.log(`Joined to room --- ${hostName}`);
         dispatch(setHostName(hostName!));
-        // socketClient.emit('joinToRoom', hostName);
 
         const path = `/hostRoom/${hostName}?nickName=${nickName}&checkHost=false`;
 
@@ -26,7 +24,6 @@ export const ConnectInfo = () => {
     };
     return (
         <div>
-            {/* {console.log(`parsing hosts ${JSON.stringify(foundHostDate)}`)} */}
             {hostsData.length ? (
                 <div>
                     {hostsData.map((item: IHostData, ind: number) => (

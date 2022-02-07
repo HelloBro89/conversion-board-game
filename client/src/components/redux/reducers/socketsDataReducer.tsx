@@ -3,6 +3,7 @@ import {
     SET_SOCKET_CONNECTION,
     SET_PLAYER_NAMES,
     SET_NEW_HOST,
+    DEL_HOST,
     RESET_SOCKET_DATA,
 } from '../actions/socketsDataAction';
 import { IInitialState } from '../../interfaces/Interfaces';
@@ -10,7 +11,6 @@ import { IInitialState } from '../../interfaces/Interfaces';
 const initialState: IInitialState = {
     hostsData: [],
     connectedSocket: {},
-    // playerNames: ['Pasha', 'Veronika', 'Lucky'],
     playerNames: [],
 };
 
@@ -21,6 +21,12 @@ function socketsDataReducer(state = initialState, action: { type: string; payloa
 
         case SET_NEW_HOST:
             return { ...state, hostsData: [...state.hostsData, action.payload] };
+
+        case DEL_HOST:
+            return {
+                ...state,
+                hostsData: [...state.hostsData.filter((item) => item.hostName !== action.payload)],
+            };
 
         case SET_SOCKET_CONNECTION:
             return { ...state, connectedSocket: action.payload };

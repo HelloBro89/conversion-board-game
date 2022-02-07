@@ -5,9 +5,9 @@ import {
     ISetSocketConnection,
 } from '../interfaces/Interfaces';
 import {
+    delHost,
     setHostData,
     setNewHost,
-    setPlayerNames,
     setSocketConnection,
 } from '../redux/actions/socketsDataAction';
 import { Dispatch } from 'react';
@@ -23,13 +23,18 @@ export const setMainEvents = (
         dispatch(setNewHost(data));
         console.log(`********* Added new host event`);
         console.log(`added new host ${JSON.stringify(data.players)}`);
-        dispatch(setPlayerNames(data.players));
+        // dispatch(setPlayerNames(data.players));
     });
     socket.on('hostsData', (data: IHostData[]) => {
         console.log(`Listener Host Data Event`);
-        console.log(`All hosts --- ${JSON.stringify(data)}`);
+        console.log(`All hosts:`);
         console.log(data);
 
         dispatch(setHostData(data));
+    });
+
+    socket.on('deleteHost', (roomName: string) => {
+        dispatch(delHost(roomName));
+        console.log(`Host deleted --- ${roomName}`);
     });
 };

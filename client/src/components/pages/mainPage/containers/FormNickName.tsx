@@ -3,12 +3,9 @@ import { TextField, Box } from '@material-ui/core';
 import { NavLink } from 'react-router-dom';
 import { useStyles } from '../styleMainPage';
 import { useDispatch, useSelector } from 'react-redux';
-// import io from 'socket.io-client';
-// import socketIOClient from 'socket.io-client';
 import { setNickName } from '../../../redux/actions/appDataAction';
 import { RootState } from '../../../redux';
 import { textFieldFilter, eventCode } from '../../../helpers/textFieldFilter';
-// const socket = socketIOClient();
 
 const FormNickName = () => {
     const enterRef = useRef<HTMLAnchorElement>(null);
