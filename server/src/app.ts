@@ -37,7 +37,7 @@ let hosts: IHostData[] = [
 ];
 
 io.on('connection', async (socket) => {
-    // console.log(hosts);
+    console.log(`************* Connection EVENT ***************`);
     console.log(`The user is connected to the public room --- User ID --- ${socket.id} ---`);
 
     // const socketQuery = Object.assign({}, socket.handshake.query);
@@ -50,6 +50,8 @@ io.on('connection', async (socket) => {
 
         try {
             console.log(`*********** Join to room EVENT ***********`);
+            const { nickName } = Object.assign({}, socket.handshake.query);
+            console.log(`Nick NAME --- ${nickName}`);
             // console.log(data);
             // console.log(`HOSTS: `);
             // console.log(hosts);
@@ -100,6 +102,7 @@ io.on('connection', async (socket) => {
 
     socket.on('leaveTheRoom', async (roomName) => {
         console.log(`*********** Leave the room EVENT ***********`);
+
         // console.log(`Current host -- ${JSON.stringify(hosts[0])}`);
         // console.log(`Room Name -- ${roomName}`);
         // console.log(`Socket ID -- ${socket.id}`);
@@ -117,15 +120,20 @@ io.on('connection', async (socket) => {
             hosts.splice(hostIndex, 1);
         } else {
             console.log(' !!!!!!!! LEAVE ROOM');
+
+            const roomIndex = hosts.findIndex((item) => item.hostName === roomName);
+
+            if (roomIndex < 0) return;
+
             const { nickName } = Object.assign({}, socket.handshake.query);
             console.log(`Nick NAME --- ${nickName}`);
 
-            const roomIndex = hosts.findIndex((item) => item.hostName === roomName);
             const playerIndex = hosts[roomIndex]!.players.findIndex((item) => item === nickName);
+            console.log(`playerIndex ${playerIndex}`);
             hosts[roomIndex]!.players.splice(playerIndex, 1);
 
             socket.to(`${roomName}`).emit('leavingTheRoom', {
-                message: `User has left from room --- ${roomName} --- USER ID --- ${socket.id} ---`,
+                message: `User has left from room --- ${roomName} --- USER ID --- ${socket.id}`,
                 masterHost: false,
                 players: hosts[roomIndex]!.players,
             });
@@ -163,11 +171,11 @@ io.on('connection', async (socket) => {
                     console.log(`Nick NAME --- ${nickName}`);
 
                     const roomIndex = hosts.findIndex((item) => item.hostName === socketRoom);
+
                     const playerIndex = hosts[roomIndex]!.players.findIndex((item) => item === nickName);
                     hosts[roomIndex]!.players.splice(playerIndex, 1);
                     // console.log(`-------------------------------`);
                     // console.log(hosts);
-
                     // console.log(`-------------------------------`);
 
                     socket.to(`${socketRoom}`).emit('leavingTheRoom', {

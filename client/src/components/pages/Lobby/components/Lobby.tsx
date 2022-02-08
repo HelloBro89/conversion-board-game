@@ -22,9 +22,9 @@ export const Lobby = () => {
     useEffect(() => {
         console.log(`USE EFFECT --- LOBBY`);
 
-        console.log(`All params LOBBY`);
-        console.log(dataOne);
-        console.log(dataTwo);
+        // console.log(`All params LOBBY`);
+        // console.log(dataOne);
+        // console.log(dataTwo);
 
         console.log(`********* ${params.nickName} - ${nickName}`);
 
@@ -33,6 +33,7 @@ export const Lobby = () => {
         }
         if (Object.keys(connectedSocket).length !== 0) {
             console.log(`foundRoomName - ${hostName}`);
+            console.log(connectedSocket);
 
             connectedSocket.removeAllListeners('connectToRoom');
             connectedSocket.removeAllListeners('leavingTheRoom');
@@ -50,7 +51,9 @@ export const Lobby = () => {
             return;
         }
 
-        const socket = socketIOClient('http://localhost:4000', { query: { nickName: nickName } });
+        const socket = socketIOClient('http://localhost:4000', {
+            query: { nickName: params.nickName },
+        });
         setMainEvents(socket, (setAction) => dispatch(setAction));
 
         // window.onbeforeunload = () => {

@@ -15,13 +15,8 @@ export const HostRoom = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [searchParams /* setSearchParams */] = useSearchParams();
-    const { playerNames, connectedSocket, hostsData } = useSelector(
-        (state: RootState) => state.socketsData
-    );
+    const { playerNames, connectedSocket } = useSelector((state: RootState) => state.socketsData);
     const { nickName } = useSelector((state: RootState) => state.appData);
-
-    const dataOne = useSelector((state: RootState) => state.socketsData);
-    const dataTwo = useSelector((state: RootState) => state.appData);
 
     useEffect(() => {
         console.log(`USE EFFECT --- HOST ROOM`);
@@ -45,6 +40,7 @@ export const HostRoom = () => {
             return;
         }
         const checkHostFromUrlParams = searchParams.get('checkHost');
+        const nickNameFromParams = searchParams.get('nickName');
         if (Object.keys(connectedSocket).length !== 0) {
             // if (checkHostFromUrlParams === 'false') {
             // }
@@ -53,12 +49,8 @@ export const HostRoom = () => {
             connectedSocket.on(
                 'connectToRoom',
                 (data: { message: string; playerNames: string[] }) => {
-                    console.log(`Array of players names:`);
-                    console.log(data.playerNames);
                     dispatch(setPlayerNames(data.playerNames));
-                    console.log(`Listen connect to ROOM`);
-                    // console.log(data);
-                    // console.log(data.message);
+                    console.log(`******** Connect to room EVENT`);
                 }
             );
             connectedSocket.on(
@@ -67,7 +59,8 @@ export const HostRoom = () => {
                     if (data.masterHost === true) {
                         alert('Host has left this room !');
                         console.log(`Host has left this room !`);
-                        navigate('/error');
+                        navigate(`/lobby/${nickNameFromParams}`);
+                        // navigate('/error');
                     } else if (data.masterHost === false) {
                         alert('Player has left the room !');
                         dispatch(setPlayerNames(data.players!));
@@ -81,12 +74,12 @@ export const HostRoom = () => {
             return;
         }
 
-        const nickNameFromParams = searchParams.get('nickName');
-
         dispatch(setNickName(nickNameFromParams!));
         dispatch(setHostName(params.hostName!));
 
-        const socket = socketIOClient('http://localhost:4000', { query: { nickName: nickName } });
+        const socket = socketIOClient('http://localhost:4000', {
+            query: { nickName: nickNameFromParams },
+        });
         setMainEvents(socket, (setAction) => dispatch(setAction));
 
         if (checkHostFromUrlParams === 'true') {
@@ -140,7 +133,8 @@ export const HostRoom = () => {
                 if (data.masterHost === true) {
                     alert('Host has left this room !');
                     console.log(`Host has left this room !`);
-                    navigate('/error');
+                    navigate(`/lobby/${nickNameFromParams}`);
+                    // navigate('/error');
                 } else if (data.masterHost === false) {
                     dispatch(setPlayerNames(data.players!));
                     console.log(data.players);
