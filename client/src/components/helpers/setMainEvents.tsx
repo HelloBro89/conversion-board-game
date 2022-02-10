@@ -21,20 +21,20 @@ export const setMainEvents = (
     // console.log(socket);
     socket.on('addNewHost', (data: IHostData) => {
         dispatch(setNewHost(data));
-        console.log(`********* Added new host event`);
-        console.log(`added new host ${JSON.stringify(data.players)}`);
+        // console.log(`********* Added new host event`);
+        // console.log(`added new host ${JSON.stringify(data.players)}`);
         // dispatch(setPlayerNames(data.players));
     });
     socket.on('hostsData', (data: IHostData[]) => {
-        console.log(`Listener Host Data Event`);
-        console.log(`All hosts:`);
-        console.log(data);
+        // console.log(`Listener Host Data Event`);
+        // console.log(`All hosts:`);
+        // console.log(data);
 
         dispatch(setHostData(data));
     });
 
     socket.on('deleteHost', (roomName: string) => {
         dispatch(delHost(roomName));
-        console.log(`Host deleted --- ${roomName}`);
+        // console.log(`Host deleted --- ${roomName}`);
     });
 };

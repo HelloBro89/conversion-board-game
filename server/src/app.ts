@@ -14,16 +14,6 @@ app.use(Express.json());
 app.use(Express.urlencoded({ extended: false }));
 app.use(cors());
 
-// console.log(`***** ${NODE_ENV} LENGTH ${NODE_ENV?.length}`);
-
-if (NODE_ENV === 'production') {
-    const pathToIndexHTML = path.join(__dirname, /* './' */ '../../client/build');
-    app.use(Express.static(pathToIndexHTML));
-
-    app.get('/', (_req, res) => {
-        res.status(200);
-    });
-}
 interface IHostData {
     numOfPlayers: string;
     gameTime: string;
@@ -35,11 +25,44 @@ interface IHostData {
 let hosts: IHostData[] = [
     /* { numOfPlayers: '2', gameTime: 'average', hostName: 'FIRST', hostID: 'sajn3n234j2n', players: [] } */
 ];
+let users: (string | string[] | undefined)[] = ['pasha'];
+
+// console.log(`***** ${NODE_ENV} LENGTH ${NODE_ENV?.length}`);
+
+if (NODE_ENV === 'production') {
+    const pathToIndexHTML = path.join(__dirname, /* './' */ '../../client/build');
+    app.use(Express.static(pathToIndexHTML));
+
+    app.get('/', (_req, res) => {
+        res.status(200);
+    });
+}
+
+app.get('/chekcNickName/:nickName', (req, res) => {
+    console.log(`********* REQ GET *****************`);
+    const playerNickName = req.params.nickName;
+    const existencePlayer = users.indexOf(playerNickName);
+    console.log(`Index player ---- ${existencePlayer}`);
+    console.log(playerNickName);
+
+    res.status(200).json({ existence: existencePlayer });
+
+    // if (existencePlayer !== -1) {
+    //     console.log(`Send true`);
+
+    //     res.status(200).json({ existence: true });
+    // } else {
+    //     res.status(200).json({ existence: false });
+    // }
+});
 
 io.on('connection', async (socket) => {
     console.log(`************* Connection EVENT ***************`);
-    console.log(`The user is connected to the public room --- User ID --- ${socket.id} ---`);
-
+    const { nickName } = Object.assign({}, socket.handshake.query);
+    console.log(typeof nickName);
+    console.log(`The user is connected to the public room --- User ID --- ${socket.id}  User name --- ${nickName}`);
+    users.push(nickName);
+    console.log(users);
     // const socketQuery = Object.assign({}, socket.handshake.query);
     // console.log(socketQuery);
 
@@ -50,8 +73,8 @@ io.on('connection', async (socket) => {
 
         try {
             console.log(`*********** Join to room EVENT ***********`);
-            const { nickName } = Object.assign({}, socket.handshake.query);
-            console.log(`Nick NAME --- ${nickName}`);
+            // const { nickName } = Object.assign({}, socket.handshake.query);
+            // console.log(`Nick NAME --- ${nickName}`);
             // console.log(data);
             // console.log(`HOSTS: `);
             // console.log(hosts);
@@ -193,6 +216,10 @@ io.on('connection', async (socket) => {
 
     socket.on('disconnect', async () => {
         console.log(`**************** Disconnect EVENT ************`);
+        const { nickName } = Object.assign({}, socket.handshake.query);
+        let ind = users.indexOf(nickName);
+        users.splice(ind, 1);
+        console.log(users);
         console.log(`A user disconnect ${socket.id}`);
     });
 });

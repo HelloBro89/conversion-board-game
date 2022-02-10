@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import socketIOClient from 'socket.io-client';
 import styles from '../lobbyStyle.module.css';
@@ -12,33 +12,32 @@ import { setMainEvents } from '../../../helpers/setMainEvents';
 export const Lobby = () => {
     const dispatch = useDispatch();
     const params = useParams();
+    const navigate = useNavigate();
     const { nickName, hostName } = useSelector((state: RootState) => state.appData);
     const { connectedSocket, hostsData, playerNames } = useSelector(
         (state: RootState) => state.socketsData
     );
-    const dataOne = useSelector((state: RootState) => state.socketsData);
-    const dataTwo = useSelector((state: RootState) => state.appData);
 
     useEffect(() => {
         console.log(`USE EFFECT --- LOBBY`);
+        // console.log(`********* ${params.nickName} - ${nickName}`);
 
-        // console.log(`All params LOBBY`);
-        // console.log(dataOne);
-        // console.log(dataTwo);
+        // if (params.nickName !== nickName) {
+        //     console.log(`Nick name check`);
+        //     console.log(`${params.nickName} --- ${nickName}`);
 
-        console.log(`********* ${params.nickName} - ${nickName}`);
+        //     dispatch(setNickName(params.nickName!));
+        // }
 
-        if (params.nickName !== nickName) {
-            dispatch(setNickName(params.nickName!));
-        }
         if (Object.keys(connectedSocket).length !== 0) {
-            console.log(`foundRoomName - ${hostName}`);
-            console.log(connectedSocket);
+            console.log(`There is a SOCKET`);
+            // console.log(`foundRoomName - ${hostName}`);
+            // console.log(connectedSocket);
 
             connectedSocket.removeAllListeners('connectToRoom');
             connectedSocket.removeAllListeners('leavingTheRoom');
-            console.log(`!!!!!!!!!!!`);
-            console.log(playerNames);
+            // console.log(`!!!!!!!!!!!`);
+            // console.log(playerNames);
 
             if (hostName !== '') {
                 console.log(`User left ${connectedSocket.id}`);
@@ -56,6 +55,19 @@ export const Lobby = () => {
         });
         setMainEvents(socket, (setAction) => dispatch(setAction));
 
+        if (nickName === '') {
+            (async () => {
+                const checkExistingNickName = await dispatch(setNickName(params.nickName!));
+                if (checkExistingNickName as unknown) {
+                    alert(`Nick name already exist!!!`);
+                    navigate('/');
+                    return;
+                }
+            })();
+
+            // dispatch(setNickName(params.nickName!));
+        }
+
         // window.onbeforeunload = () => {
         //     return true;
         // };
@@ -67,8 +79,8 @@ export const Lobby = () => {
     };
 
     const testBut = () => {
-        console.log('Hosts:');
-        console.log(hostsData);
+        console.log('NIck name:');
+        console.log(nickName);
     };
 
     return (

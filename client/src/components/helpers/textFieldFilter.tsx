@@ -9,7 +9,8 @@ export const textFieldFilter = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaEl
     return nickValue;
 };
 
-export const eventCode = (e: KeyboardEvent, enterRef?: RefObject<HTMLAnchorElement>) => {
+export const eventCode = (e: KeyboardEvent, enterRef?: RefObject<HTMLButtonElement>) => {
+    // export const eventCode = (e: KeyboardEvent, enterRef?: RefObject<HTMLAnchorElement>) => {
     if (e.code === 'Enter' || e.code === 'NumpadEnter') {
         if (enterRef) {
             const refElem = enterRef.current as HTMLElement;

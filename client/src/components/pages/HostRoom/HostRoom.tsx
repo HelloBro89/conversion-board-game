@@ -39,11 +39,11 @@ export const HostRoom = () => {
             navigate('/error');
             return;
         }
+
         const checkHostFromUrlParams = searchParams.get('checkHost');
         const nickNameFromParams = searchParams.get('nickName');
+
         if (Object.keys(connectedSocket).length !== 0) {
-            // if (checkHostFromUrlParams === 'false') {
-            // }
             connectedSocket.emit('joinToRoom', { roomName: params.hostName, nickName });
             console.log(` STATUS --- ${checkHostFromUrlParams}`);
             connectedSocket.on(
@@ -74,8 +74,20 @@ export const HostRoom = () => {
             return;
         }
 
-        dispatch(setNickName(nickNameFromParams!));
         dispatch(setHostName(params.hostName!));
+        // if (nickName === '') {
+        (async () => {
+            const checkExistingNickName = await dispatch(setNickName(nickNameFromParams!));
+            console.log('TEST');
+
+            console.log(checkExistingNickName);
+            if (checkExistingNickName as unknown) {
+                alert(`Nick name already exist!!!`);
+                navigate('/');
+                return;
+            }
+        })();
+        // }
 
         const socket = socketIOClient('http://localhost:4000', {
             query: { nickName: nickNameFromParams },
@@ -92,8 +104,6 @@ export const HostRoom = () => {
                 }
 
                 dispatch(setHostName(parseJSON.hostName));
-                // socket.emit('leaveTheRoom', parseJSON.hostName);
-                console.log(`************** Socket ID **************`);
 
                 const refreshedHost = {
                     numOfPlayers: parseJSON.hostName,
@@ -104,27 +114,16 @@ export const HostRoom = () => {
                 };
                 console.log(`!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! `);
                 socket.emit('newHost', refreshedHost); // HERE WILL BE A localstorage data
-                // console.log(`!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ${refreshedHost}`);
-                // socket.emit('newHost', refreshedHost); // HERE WILL BE A localstorage data
             }
             dispatch(setCheckHost(true));
-
-            // console.log(`STATUS --- ${checkHostFromUrlParams}`);
         }
-        // else {
         socket.emit('joinToRoom', { roomName: params.hostName, nickName: nickNameFromParams });
-        // console.log('somthing');
-        // }
 
-        // setMainEvents(socket, (setAction) => dispatch(setAction));
-        // socket.emit('joinToRoom', { roomName: params.hostName, nickName });
         socket.on('connectToRoom', (data: { message: string; playerNames: string[] }) => {
             console.log(`Array of players names:`);
             console.log(data.playerNames);
 
             dispatch(setPlayerNames(data.playerNames));
-            // console.log(data);
-            // console.log(data.message);
         });
 
         socket.on(
