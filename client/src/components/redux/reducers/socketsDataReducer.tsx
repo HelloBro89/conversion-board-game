@@ -23,9 +23,13 @@ function socketsDataReducer(state = initialState, action: { type: string; payloa
             return { ...state, hostsData: [...state.hostsData, action.payload] };
 
         case DEL_HOST:
+            // return {
+            //     ...state,
+            //     hostsData: [...state.hostsData.filter((item) => item.hostName !== action.payload)],
+            // };
             return {
                 ...state,
-                hostsData: [...state.hostsData.filter((item) => item.hostName !== action.payload)],
+                hostsData: state.hostsData.filter((item) => item.hostName !== action.payload),
             };
 
         case SET_SOCKET_CONNECTION:
