@@ -38,7 +38,7 @@ if (NODE_ENV === 'production') {
     });
 }
 
-app.get('/chekcNickName/:nickName', (req, res) => {
+app.get('/checkNickName/:nickName', (req, res) => {
     console.log(`********* REQ GET *****************`);
     const playerNickName = req.params.nickName;
     const existencePlayer = users.indexOf(playerNickName);

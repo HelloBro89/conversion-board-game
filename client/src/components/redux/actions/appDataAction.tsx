@@ -26,7 +26,7 @@ export function setTemporaryNickName(value: string) {
 
 export function setNickName(value: string) {
     return async (dispatch: Dispatch) => {
-        const res = await axios.get(`/chekcNickName/${value}`);
+        const res = await axios.get(`/checkNickName/${value}`);
         console.log(res.data.existence);
 
         if (res.data.existence !== -1) {

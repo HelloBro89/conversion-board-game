@@ -1,7 +1,7 @@
 import axios from '../services/api';
 
 const checkUniqueNickName = async (nickName: string) => {
-    const res = await axios.get(`/chekcNickName/${nickName}`);
+    const res = await axios.get(`/checkNickName/${nickName}`);
     // console.log(typeof res.data.existence);
     // return res.data.existence;
     return JSON.parse(res.data.existence);
